@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cobra Aí — Cobranças profissionais sem constrangimento</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --verde:#00875a;--verde2:#00b37e;--verde-claro:#e6faf4;--verde-mid:#b3f0dc;
+  --amarelo:#f59e0b;--amarelo-claro:#fffbeb;--amarelo-mid:#fde68a;
+  --vermelho:#dc2626;--vermelho-claro:#fff5f5;
+  --ink:#1a1a2e;--ink2:#3d3d5c;--ink3:#8888a8;
+  --bg:#f7f8fc;--bg2:#eef0f8;--white:#fff;--border:#e0e3f0;
+  --radius:14px;--shadow:0 2px 16px rgba(26,26,46,.08);
+}
+body{font-family:'Nunito Sans',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;font-size:15px;line-height:1.6}
+.header{background:var(--ink);padding:0 28px;height:62px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;border-bottom:3px solid var(--verde2)}
+.logo{font-family:'Nunito',sans-serif;font-weight:900;font-size:22px;color:white}
+.logo span{color:var(--verde2)}
+.logo-tag{font-size:11px;font-weight:600;color:var(--ink3);letter-spacing:.4px;margin-top:1px;font-family:'Nunito Sans',sans-serif}
+.pill{background:var(--verde);color:white;font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;font-family:'Nunito',sans-serif}
+.hero{background:linear-gradient(135deg,var(--ink) 0%,#1a3a2e 100%);padding:24px 28px 20px;text-align:center}
+.hero-title{font-family:'Nunito',sans-serif;font-weight:900;font-size:26px;color:white;letter-spacing:-.5px;margin-bottom:4px}
+.hero-title span{color:var(--verde2)}
+.hero-sub{font-size:13px;color:#aaccbb}
+.container{max-width:860px;margin:0 auto;padding:28px 20px 72px}
+.section-title{font-family:'Nunito',sans-serif;font-weight:900;font-size:20px;color:var(--ink);margin-bottom:4px}
+.section-sub{font-size:13px;color:var(--ink3);margin-bottom:20px}
+
+.etapa-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:24px}
+.etapa-card{background:var(--white);border:2px solid var(--border);border-radius:var(--radius);padding:14px 10px;cursor:pointer;transition:all .2s;text-align:center;user-select:none}
+.etapa-card:hover{border-color:var(--ink3);transform:translateY(-1px)}
+.etapa-card.active{border-color:var(--verde2);background:var(--verde-claro);transform:translateY(-2px);box-shadow:var(--shadow)}
+.etapa-card.active .etapa-nome{color:var(--verde)}
+.etapa-icon{font-size:24px;margin-bottom:6px}
+.etapa-nome{font-family:'Nunito',sans-serif;font-weight:800;font-size:12px;color:var(--ink2);line-height:1.3}
+.etapa-dias{font-size:10px;color:var(--ink3);margin-top:3px;font-weight:600}
+
+.card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:14px;box-shadow:var(--shadow)}
+.card-title{font-family:'Nunito',sans-serif;font-weight:800;font-size:12px;color:var(--ink2);text-transform:uppercase;letter-spacing:.7px;margin-bottom:14px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-group.full{grid-column:1/-1}
+label{font-family:'Nunito',sans-serif;font-weight:700;font-size:11px;color:var(--ink2);text-transform:uppercase;letter-spacing:.6px}
+input,select,textarea{font-family:'Nunito Sans',sans-serif;font-size:14px;color:var(--ink);background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:10px 13px;transition:all .2s;outline:none;width:100%;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:var(--verde2);background:white;box-shadow:0 0 0 3px rgba(0,179,126,.08)}
+.input-prefix{position:relative}
+.input-prefix span{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--ink3);font-weight:600;pointer-events:none}
+.input-prefix input{padding-left:28px}
+
+.tom-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.tom-chip{background:var(--white);border:2px solid var(--border);border-radius:10px;padding:10px 8px;cursor:pointer;transition:all .2s;text-align:center;user-select:none;font-family:'Nunito',sans-serif;font-weight:700;font-size:12px;color:var(--ink3);display:flex;flex-direction:column;align-items:center;gap:4px}
+.tom-chip input{display:none}
+.tom-chip.selected{border-color:var(--verde2);background:var(--verde-claro);color:var(--verde)}
+.tom-chip:hover:not(.selected){border-color:var(--ink3);background:var(--bg2)}
+
+.form-dinamico{display:none;animation:fadeUp .3s ease}
+.form-dinamico.show{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+.btn-generate{width:100%;background:var(--verde);color:white;border:none;padding:15px;border-radius:var(--radius);font-family:'Nunito',sans-serif;font-weight:900;font-size:16px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 4px 20px rgba(0,135,90,.25)}
+.btn-generate:hover{background:var(--verde2)}
+.btn-generate:disabled{background:var(--ink3);box-shadow:none;cursor:not-allowed}
+
+.loading{display:none;flex-direction:column;align-items:center;gap:14px;padding:44px 20px;text-align:center}
+.loading.show{display:flex}
+.spinner{width:40px;height:40px;border:3px solid var(--bg2);border-top-color:var(--verde2);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-msg{font-size:14px;color:var(--ink3);font-style:italic}
+
+.results{display:none;margin-top:24px}
+.results.show{display:block}
+.results-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.results-title{font-family:'Nunito',sans-serif;font-weight:900;font-size:18px;color:var(--ink)}
+.btn-nova{background:none;border:1.5px solid var(--border);color:var(--ink3);padding:8px 16px;border-radius:8px;font-family:'Nunito',sans-serif;font-weight:700;font-size:12px;cursor:pointer;transition:all .2s}
+.btn-nova:hover{border-color:var(--ink2);color:var(--ink2)}
+
+.msg-card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);margin-bottom:12px;overflow:hidden;box-shadow:var(--shadow);animation:fadeUp .4s ease both}
+.msg-card:nth-child(2){animation-delay:.08s}
+.msg-card:nth-child(3){animation-delay:.16s}
+.msg-head{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--bg2);background:var(--bg)}
+.msg-label{display:flex;align-items:center;gap:8px;font-family:'Nunito',sans-serif;font-weight:800;font-size:12px;color:var(--ink2);text-transform:uppercase;letter-spacing:.6px}
+.msg-badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;font-family:'Nunito',sans-serif}
+.badge-suave{background:var(--verde-claro);color:#065f46}
+.badge-firme{background:var(--amarelo-claro);color:#92400e}
+.badge-urgente{background:var(--vermelho-claro);color:#991b1b}
+.btn-copiar{background:none;border:1.5px solid var(--border);color:var(--ink3);padding:6px 12px;border-radius:7px;font-family:'Nunito',sans-serif;font-weight:700;font-size:11px;cursor:pointer;transition:all .2s}
+.btn-copiar:hover{border-color:var(--verde2);color:var(--verde2)}
+.btn-copiar.copiado{border-color:var(--verde);color:var(--verde);background:var(--verde-claro)}
+.msg-body{padding:16px;font-size:14px;line-height:1.8;color:var(--ink2);white-space:pre-wrap}
+
+.alerta-card{background:var(--amarelo-claro);border:1.5px solid var(--amarelo-mid);border-radius:var(--radius);padding:14px 16px;margin-bottom:14px;font-size:13px;color:#78350f;line-height:1.6}
+.alerta-card strong{font-family:'Nunito',sans-serif;font-weight:800;display:block;margin-bottom:3px}
+
+hr{border:none;border-top:1px solid var(--border);margin:22px 0}
+.footer-strip{background:var(--ink);text-align:center;padding:14px;font-size:12px;color:var(--ink3);font-family:'Nunito',sans-serif;font-weight:600;position:fixed;bottom:0;left:0;right:0;border-top:2px solid var(--verde2)}
+.footer-strip span{color:var(--verde2)}
+@media(max-width:600px){.form-grid{grid-template-columns:1fr}.tom-grid{grid-template-columns:repeat(3,1fr)}.etapa-grid{grid-template-columns:repeat(3,1fr)}.container{padding:20px 14px 72px}}
+</style>
+</head>
+<body>
+<header class="header">
+  <div>
+    <div class="logo">Cobra <span>Aí</span></div>
+    <div class="logo-tag">Cobre sem constrangimento. Receba sem conflito.</div>
+  </div>
+  <span class="pill">BETA</span>
+</header>
+<div class="hero">
+  <div class="hero-title">Receba o que é <span>seu</span></div>
+  <div class="hero-sub">Escolha a etapa da cobrança. A mensagem certa sai na hora.</div>
+</div>
+<div class="container">
+  <div class="section-title">Em que etapa está a cobrança?</div>
+  <p class="section-sub">Cada momento pede um tom diferente. Escolha o que melhor descreve a situação.</p>
+
+  <div class="etapa-grid">
+    <div class="etapa-card" id="et-vencendo" onclick="selecionarEtapa('vencendo')">
+      <div class="etapa-icon">🔔</div>
+      <div class="etapa-nome">Vencendo hoje</div>
+      <div class="etapa-dias">Lembrete amigável</div>
+    </div>
+    <div class="etapa-card" id="et-dias" onclick="selecionarEtapa('dias')">
+      <div class="etapa-icon">📅</div>
+      <div class="etapa-nome">1 a 7 dias</div>
+      <div class="etapa-dias">Primeiro aviso</div>
+    </div>
+    <div class="etapa-card" id="et-semanas" onclick="selecionarEtapa('semanas')">
+      <div class="etapa-icon">⚠️</div>
+      <div class="etapa-nome">8 a 30 dias</div>
+      <div class="etapa-dias">Segundo aviso</div>
+    </div>
+    <div class="etapa-card" id="et-meses" onclick="selecionarEtapa('meses')">
+      <div class="etapa-icon">🔴</div>
+      <div class="etapa-nome">Mais de 30 dias</div>
+      <div class="etapa-dias">Cobrança firme</div>
+    </div>
+    <div class="etapa-card" id="et-negociacao" onclick="selecionarEtapa('negociacao')">
+      <div class="etapa-icon">🤝</div>
+      <div class="etapa-nome">Propor acordo</div>
+      <div class="etapa-dias">Parcelamento</div>
+    </div>
+    <div class="etapa-card" id="et-sumido" onclick="selecionarEtapa('sumido')">
+      <div class="etapa-icon">👻</div>
+      <div class="etapa-nome">Cliente sumiu</div>
+      <div class="etapa-dias">Sem resposta</div>
+    </div>
+  </div>
+
+  <div class="form-dinamico" id="form-cobra">
+    <div class="card">
+      <div class="card-title" id="form-titulo">💸 Detalhes da cobrança</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Nome do cliente</label>
+          <input type="text" id="c-nome" placeholder="Ex: João, Sra. Maria, Empresa XYZ">
+        </div>
+        <div class="form-group">
+          <label>Valor em aberto</label>
+          <div class="input-prefix"><span>R$</span><input type="number" id="c-valor" min="0" step="0.01" placeholder="0,00"></div>
+        </div>
+        <div class="form-group">
+          <label>O que é cobrado</label>
+          <input type="text" id="c-servico" placeholder="Ex: corte e escova, consultoria de março, pedido #123">
+        </div>
+        <div class="form-group">
+          <label>Data de vencimento</label>
+          <input type="date" id="c-vencimento">
+        </div>
+        <div class="form-group">
+          <label>Forma de pagamento aceita</label>
+          <input type="text" id="c-pagamento" placeholder="Ex: Pix, boleto, cartão, dinheiro">
+        </div>
+        <div class="form-group">
+          <label>Seu canal de contato</label>
+          <input type="text" id="c-contato" placeholder="Ex: (11) 99999-9999, @empresa">
+        </div>
+        <div class="form-group full">
+          <label>Contexto adicional (opcional)</label>
+          <textarea id="c-contexto" placeholder="Ex: Cliente disse que ia pagar semana passada e não pagou. Já enviei 2 mensagens sem resposta..." style="min-height:70px"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🎭 Tom da cobrança</div>
+      <div class="tom-grid">
+        <label class="tom-chip selected" id="tom-suave">
+          <input type="radio" name="tom-c" value="suave" checked>
+          <span style="font-size:18px">😊</span>Suave
+        </label>
+        <label class="tom-chip" id="tom-firme">
+          <input type="radio" name="tom-c" value="firme">
+          <span style="font-size:18px">💼</span>Firme
+        </label>
+        <label class="tom-chip" id="tom-urgente">
+          <input type="radio" name="tom-c" value="urgente">
+          <span style="font-size:18px">🔴</span>Urgente
+        </label>
+      </div>
+    </div>
+
+    <button class="btn-generate" onclick="gerarCobranca()" id="btn-gerar">💸 Gerar mensagens de cobrança</button>
+  </div>
+
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    <div class="loading-msg" id="loading-msg">Analisando a situação...</div>
+  </div>
+
+  <div class="results" id="results">
+    <hr>
+    <div class="results-top">
+      <div class="results-title">✅ Mensagens prontas para enviar</div>
+      <button class="btn-nova" onclick="resetar()">↩ Nova cobrança</button>
+    </div>
+    <div class="alerta-card" id="alerta-card"></div>
+    <div id="msgs-container"></div>
+  </div>
+</div>
+<div class="footer-strip">Simplifica <span>Aí</span> — Cobra Aí</div>
+<script>
+const etapas={
+  vencendo:{nome:'Vencendo hoje',icon:'🔔',tom:'suave'},
+  dias:{nome:'1 a 7 dias em atraso',icon:'📅',tom:'suave'},
+  semanas:{nome:'8 a 30 dias em atraso',icon:'⚠️',tom:'firme'},
+  meses:{nome:'Mais de 30 dias em atraso',icon:'🔴',tom:'urgente'},
+  negociacao:{nome:'Proposta de acordo ou parcelamento',icon:'🤝',tom:'firme'},
+  sumido:{nome:'Cliente sem resposta',icon:'👻',tom:'firme'},
+};
+let etapaAtiva=null;
+function selecionarEtapa(et){
+  document.querySelectorAll('.etapa-card').forEach(c=>c.classList.remove('active'));
+  document.getElementById('et-'+et).classList.add('active');
+  etapaAtiva=et;
+  const e=etapas[et];
+  document.getElementById('form-titulo').textContent='💸 '+e.icon+' '+e.nome;
+  const tomPad=e.tom;
+  document.querySelectorAll('.tom-chip').forEach(c=>c.classList.remove('selected'));
+  document.getElementById('tom-'+tomPad).classList.add('selected');
+  document.querySelector(`input[name=tom-c][value="${tomPad}"]`).checked=true;
+  document.getElementById('form-cobra').classList.add('show');
+  document.getElementById('results').classList.remove('show');
+  document.getElementById('form-cobra').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+document.querySelectorAll('.tom-chip').forEach(chip=>{
+  chip.addEventListener('click',()=>{
+    document.querySelectorAll('.tom-chip').forEach(c=>c.classList.remove('selected'));
+    chip.classList.add('selected');
+  });
+});
+const loadMsgs=['Analisando a situação...','Definindo o tom ideal...','Construindo a mensagem...','Adicionando detalhes estratégicos...','Finalizando...'];
+let loadInt;
+function iniciarLoad(){let i=0;const el=document.getElementById('loading-msg');el.textContent=loadMsgs[0];loadInt=setInterval(()=>{i=(i+1)%loadMsgs.length;el.textContent=loadMsgs[i];},1800)}
+function pararLoad(){clearInterval(loadInt)}
+async function gerarCobranca(){
+  if(!etapaAtiva){alert('Escolha a etapa da cobrança.');return;}
+  const nome=document.getElementById('c-nome').value.trim();
+  const valor=document.getElementById('c-valor').value;
+  const servico=document.getElementById('c-servico').value.trim();
+  if(!servico){alert('Informe o que está sendo cobrado.');document.getElementById('c-servico').focus();return;}
+  const vencimento=document.getElementById('c-vencimento').value;
+  const pagamento=document.getElementById('c-pagamento').value.trim();
+  const contato=document.getElementById('c-contato').value.trim();
+  const contexto=document.getElementById('c-contexto').value.trim();
+  const tom=document.querySelector('input[name=tom-c]:checked')?.value||'suave';
+  document.getElementById('btn-gerar').disabled=true;
+  document.getElementById('loading').classList.add('show');
+  document.getElementById('results').classList.remove('show');
+  iniciarLoad();
+  const system=`Você é especialista em comunicação financeira para pequenos negócios brasileiros. Cria mensagens de cobrança que são profissionais, respeitosas e eficazes. Nunca use travessão no meio de frases. Tom humano, nunca robótico. Nunca ameace nem seja agressivo.
+
+Responda SOMENTE com JSON válido, sem markdown:
+{
+  "alerta": "Uma dica estratégica sobre essa etapa de cobrança",
+  "mensagens": [
+    {"tom": "Nome do tom", "badge": "suave|firme|urgente", "texto": "Mensagem completa pronta para enviar"},
+    {"tom": "Nome alternativo", "badge": "suave|firme|urgente", "texto": "Segunda opção"}
+  ]
+}`;
+  const dtVenc=vencimento?new Date(vencimento).toLocaleDateString('pt-BR'):'';
+  const user=`Etapa: ${etapas[etapaAtiva].nome}
+Cliente: ${nome||'cliente'}
+Valor: ${valor?'R$ '+parseFloat(valor).toLocaleString('pt-BR',{minimumFractionDigits:2}):'não informado'}
+Serviço/produto: ${servico}
+${dtVenc?'Vencimento: '+dtVenc:''}
+${pagamento?'Formas de pagamento: '+pagamento:''}
+${contato?'Contato para pagamento: '+contato:''}
+${contexto?'Contexto: '+contexto:''}
+Tom preferido: ${tom}
+
+Gere 2 mensagens: uma no tom preferido e uma alternativa. Cada mensagem deve ser completa, pronta para copiar e enviar pelo WhatsApp. Use o nome do cliente se disponível. Inclua o valor e forma de pagamento. Adapte o tom à etapa da cobrança.`;
+  try{
+    const res=await fetch('/api/gerar',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1500,system,messages:[{role:'user',content:user}]})});
+    const data=await res.json();
+    const raw=data.content?.map(b=>b.text||'').join('')||'';
+    let parsed;
+    try{parsed=JSON.parse(raw.replace(/```json|```/g,'').trim())}catch(e){throw new Error('Resposta inválida.')}
+    pararLoad();
+    document.getElementById('loading').classList.remove('show');
+    document.getElementById('btn-gerar').disabled=false;
+    renderMensagens(parsed);
+  }catch(err){
+    pararLoad();document.getElementById('loading').classList.remove('show');document.getElementById('btn-gerar').disabled=false;
+    alert('Erro: '+err.message);
+  }
+}
+const badgeLabel={suave:'😊 Suave',firme:'💼 Firme',urgente:'🔴 Urgente'};
+const badgeClass={suave:'badge-suave',firme:'badge-firme',urgente:'badge-urgente'};
+function renderMensagens(data){
+  document.getElementById('alerta-card').innerHTML=`<strong>💡 Estratégia de cobrança</strong>${data.alerta||''}`;
+  const c=document.getElementById('msgs-container');c.innerHTML='';
+  (data.mensagens||[]).forEach((m,i)=>{
+    const card=document.createElement('div');card.className='msg-card';
+    card.innerHTML=`<div class="msg-head"><div class="msg-label"><span class="msg-badge ${badgeClass[m.badge]||'badge-suave'}">${badgeLabel[m.badge]||m.tom}</span><span style="font-size:11px;color:var(--ink3);font-weight:400">${i===0?'Opção principal':'Alternativa'}</span></div><button class="btn-copiar" onclick="copiar(this,'mb-${i}')">📋 Copiar</button></div><div class="msg-body" id="mb-${i}">${esc(m.texto)}</div>`;
+    c.appendChild(card);
+  });
+  document.getElementById('results').classList.add('show');
+  document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function copiar(btn,id){
+  navigator.clipboard.writeText(document.getElementById(id).textContent).then(()=>{btn.textContent='✅ Copiado!';btn.classList.add('copiado');setTimeout(()=>{btn.textContent='📋 Copiar';btn.classList.remove('copiado');},2500);});
+}
+function resetar(){
+  document.getElementById('results').classList.remove('show');
+  document.getElementById('form-cobra').classList.remove('show');
+  document.querySelectorAll('.etapa-card').forEach(c=>c.classList.remove('active'));
+  ['c-nome','c-valor','c-servico','c-vencimento','c-pagamento','c-contato','c-contexto'].forEach(id=>document.getElementById(id).value='');
+  etapaAtiva=null;window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>

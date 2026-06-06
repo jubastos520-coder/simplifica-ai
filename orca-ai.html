@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Orça Aí — Orçamentos profissionais em segundos</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --azul:#1d4ed8;--azul2:#3b82f6;--azul-claro:#eff6ff;--azul-mid:#bfdbfe;
+  --verde:#00b37e;--verde-claro:#e6faf4;
+  --ink:#1a1a2e;--ink2:#3d3d5c;--ink3:#8888a8;
+  --bg:#f7f8fc;--bg2:#eef0f8;--white:#fff;--border:#e0e3f0;
+  --radius:14px;--shadow:0 2px 16px rgba(26,26,46,.08);
+}
+body{font-family:'Nunito Sans',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;font-size:15px;line-height:1.6}
+.header{background:var(--ink);padding:0 28px;height:62px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;border-bottom:3px solid var(--azul2)}
+.logo{font-family:'Nunito',sans-serif;font-weight:900;font-size:22px;color:white}
+.logo span{color:var(--azul2)}
+.logo-tag{font-size:11px;font-weight:600;color:var(--ink3);letter-spacing:.4px;margin-top:1px;font-family:'Nunito Sans',sans-serif}
+.pill{background:var(--azul);color:white;font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;font-family:'Nunito',sans-serif}
+.hero{background:linear-gradient(135deg,var(--ink) 0%,#1e2d5e 100%);padding:24px 28px 20px;text-align:center}
+.hero-title{font-family:'Nunito',sans-serif;font-weight:900;font-size:26px;color:white;letter-spacing:-.5px;margin-bottom:4px}
+.hero-title span{color:var(--azul2)}
+.hero-sub{font-size:13px;color:#aabfdd}
+.container{max-width:860px;margin:0 auto;padding:28px 20px 72px}
+.section-title{font-family:'Nunito',sans-serif;font-weight:900;font-size:20px;color:var(--ink);margin-bottom:4px}
+.section-sub{font-size:13px;color:var(--ink3);margin-bottom:20px}
+.card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:14px;box-shadow:var(--shadow)}
+.card-title{font-family:'Nunito',sans-serif;font-weight:800;font-size:12px;color:var(--ink2);text-transform:uppercase;letter-spacing:.7px;margin-bottom:14px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-group.full{grid-column:1/-1}
+label{font-family:'Nunito',sans-serif;font-weight:700;font-size:11px;color:var(--ink2);text-transform:uppercase;letter-spacing:.6px}
+input,select,textarea{font-family:'Nunito Sans',sans-serif;font-size:14px;color:var(--ink);background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:10px 13px;transition:all .2s;outline:none;width:100%;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:var(--azul2);background:white;box-shadow:0 0 0 3px rgba(59,130,246,.08)}
+.input-prefix{position:relative}
+.input-prefix span{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--ink3);font-weight:600;pointer-events:none}
+.input-prefix input{padding-left:28px}
+
+/* itens */
+.items-head{display:grid;grid-template-columns:1fr 80px 90px 90px 36px;gap:8px;padding:0 0 6px;border-bottom:1px solid var(--border);margin-bottom:8px}
+.items-head span{font-family:'Nunito',sans-serif;font-weight:700;font-size:10px;color:var(--ink3);text-transform:uppercase;letter-spacing:.6px}
+.item-row{display:grid;grid-template-columns:1fr 80px 90px 90px 36px;gap:8px;align-items:center;margin-bottom:8px}
+.item-row input{font-size:13px;padding:8px 10px}
+.item-total{font-family:'Nunito',sans-serif;font-weight:700;font-size:13px;color:var(--azul);text-align:right;padding-right:4px}
+.btn-remove{background:none;border:1.5px solid var(--border);color:var(--ink3);width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.btn-remove:hover{border-color:#dc2626;color:#dc2626}
+.btn-add{background:none;border:1.5px dashed var(--border);color:var(--ink3);padding:8px 14px;border-radius:8px;font-family:'Nunito',sans-serif;font-weight:700;font-size:12px;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:6px;width:100%}
+.btn-add:hover{border-color:var(--azul2);color:var(--azul2);background:var(--azul-claro)}
+
+.total-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-top:1.5px solid var(--border);margin-top:8px}
+.total-label{font-family:'Nunito',sans-serif;font-weight:800;font-size:14px;color:var(--ink2)}
+.total-valor{font-family:'Nunito',sans-serif;font-weight:900;font-size:20px;color:var(--azul)}
+
+.btn-generate{width:100%;background:var(--azul);color:white;border:none;padding:15px;border-radius:var(--radius);font-family:'Nunito',sans-serif;font-weight:900;font-size:16px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 4px 20px rgba(29,78,216,.25)}
+.btn-generate:hover{background:var(--azul2)}
+.btn-generate:disabled{background:var(--ink3);box-shadow:none;cursor:not-allowed}
+
+.loading{display:none;flex-direction:column;align-items:center;gap:14px;padding:44px 20px;text-align:center}
+.loading.show{display:flex}
+.spinner{width:40px;height:40px;border:3px solid var(--bg2);border-top-color:var(--azul2);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-msg{font-size:14px;color:var(--ink3);font-style:italic}
+
+/* ORÇAMENTO VISUAL */
+.results{display:none;margin-top:24px}
+.results.show{display:block}
+.results-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.results-title{font-family:'Nunito',sans-serif;font-weight:900;font-size:18px;color:var(--ink)}
+.btn-nova{background:none;border:1.5px solid var(--border);color:var(--ink3);padding:8px 16px;border-radius:8px;font-family:'Nunito',sans-serif;font-weight:700;font-size:12px;cursor:pointer;transition:all .2s}
+.btn-nova:hover{border-color:var(--ink2);color:var(--ink2)}
+.btn-imprimir{background:var(--azul);color:white;border:none;padding:8px 16px;border-radius:8px;font-family:'Nunito',sans-serif;font-weight:700;font-size:12px;cursor:pointer;transition:all .2s}
+.btn-imprimir:hover{background:var(--azul2)}
+
+.orcamento-doc{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);animation:fadeUp .4s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+.doc-header{background:var(--azul);padding:24px 28px;display:flex;justify-content:space-between;align-items:flex-start}
+.doc-empresa{color:white}
+.doc-empresa-nome{font-family:'Nunito',sans-serif;font-weight:900;font-size:20px;margin-bottom:2px}
+.doc-empresa-info{font-size:12px;opacity:.8;line-height:1.6}
+.doc-orcamento-info{text-align:right;color:white}
+.doc-orcamento-num{font-family:'Nunito',sans-serif;font-weight:900;font-size:14px;opacity:.9}
+.doc-orcamento-data{font-size:12px;opacity:.7;margin-top:3px}
+
+.doc-body{padding:24px 28px}
+.doc-cliente{background:var(--azul-claro);border-radius:10px;padding:14px 16px;margin-bottom:20px}
+.doc-cliente-label{font-family:'Nunito',sans-serif;font-weight:700;font-size:10px;color:var(--azul);text-transform:uppercase;letter-spacing:.6px;margin-bottom:4px}
+.doc-cliente-nome{font-family:'Nunito',sans-serif;font-weight:800;font-size:15px;color:var(--ink)}
+.doc-cliente-info{font-size:12px;color:var(--ink3);margin-top:2px}
+
+.doc-table{width:100%;border-collapse:collapse;margin-bottom:16px}
+.doc-table th{font-family:'Nunito',sans-serif;font-weight:700;font-size:11px;color:var(--ink3);text-transform:uppercase;letter-spacing:.6px;padding:8px 10px;border-bottom:1.5px solid var(--border);text-align:left}
+.doc-table th:last-child,.doc-table td:last-child{text-align:right}
+.doc-table td{font-size:13px;color:var(--ink2);padding:10px;border-bottom:.5px solid var(--border)}
+.doc-table tr:last-child td{border-bottom:none}
+.doc-table .item-name{font-weight:500;color:var(--ink)}
+
+.doc-totais{border-top:1.5px solid var(--border);padding-top:12px;margin-top:4px}
+.doc-total-row{display:flex;justify-content:space-between;padding:4px 10px;font-size:13px;color:var(--ink3)}
+.doc-total-row.final{font-family:'Nunito',sans-serif;font-weight:900;font-size:16px;color:var(--azul);padding:10px;background:var(--azul-claro);border-radius:8px;margin-top:6px}
+
+.doc-obs{background:var(--bg);border-radius:10px;padding:14px 16px;margin-top:16px;font-size:13px;color:var(--ink2);line-height:1.7}
+.doc-obs-label{font-family:'Nunito',sans-serif;font-weight:700;font-size:10px;color:var(--ink3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px}
+
+.doc-footer{background:var(--bg);padding:16px 28px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--ink3)}
+.doc-validade{font-family:'Nunito',sans-serif;font-weight:700;color:var(--ink2)}
+
+.msg-wpp{background:var(--verde-claro);border:1.5px solid #86efac;border-radius:var(--radius);padding:16px 18px;margin-top:14px}
+.msg-wpp-title{font-family:'Nunito',sans-serif;font-weight:800;font-size:12px;color:#065f46;text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
+.msg-wpp-body{font-size:13px;color:#065f46;line-height:1.8;white-space:pre-wrap}
+.btn-copiar-wpp{background:none;border:1.5px solid #86efac;color:#065f46;padding:5px 12px;border-radius:7px;font-family:'Nunito',sans-serif;font-weight:700;font-size:11px;cursor:pointer;transition:all .2s}
+.btn-copiar-wpp:hover{background:white}
+.btn-copiar-wpp.copiado{background:white;border-color:var(--verde)}
+
+hr{border:none;border-top:1px solid var(--border);margin:22px 0}
+.footer-strip{background:var(--ink);text-align:center;padding:14px;font-size:12px;color:var(--ink3);font-family:'Nunito',sans-serif;font-weight:600;position:fixed;bottom:0;left:0;right:0;border-top:2px solid var(--azul2)}
+.footer-strip span{color:var(--azul2)}
+@media(max-width:640px){
+  .form-grid{grid-template-columns:1fr}
+  .items-head,.item-row{grid-template-columns:1fr 70px 36px}
+  .items-head .h-qtd,.items-head .h-unit,.item-row .f-qtd,.item-row .f-unit,.item-row .f-total{display:none}
+  .container{padding:20px 14px 72px}
+  .doc-header{flex-direction:column;gap:12px}
+  .doc-orcamento-info{text-align:left}
+}
+</style>
+</head>
+<body>
+<header class="header">
+  <div>
+    <div class="logo">Orça <span>Aí</span></div>
+    <div class="logo-tag">Orçamento profissional em segundos. Feche mais negócios.</div>
+  </div>
+  <span class="pill">BETA</span>
+</header>
+<div class="hero">
+  <div class="hero-title">Orçamento que <span>convence</span></div>
+  <div class="hero-sub">Preencha os itens. O Orça Aí monta o documento e a mensagem para o WhatsApp.</div>
+</div>
+<div class="container">
+  <div class="section-title">Dados do orçamento</div>
+  <p class="section-sub">Informe os dados da sua empresa, do cliente e os serviços ou produtos.</p>
+
+  <div class="card">
+    <div class="card-title">🏢 Sua empresa</div>
+    <div class="form-grid">
+      <div class="form-group"><label>Nome da empresa *</label><input type="text" id="e-nome" placeholder="Ex: Studio Beleza Silva"></div>
+      <div class="form-group"><label>Telefone / WhatsApp</label><input type="text" id="e-tel" placeholder="Ex: (11) 99999-9999"></div>
+      <div class="form-group"><label>E-mail ou Instagram</label><input type="text" id="e-email" placeholder="Ex: contato@empresa.com ou @empresa"></div>
+      <div class="form-group"><label>Cidade</label><input type="text" id="e-cidade" placeholder="Ex: São Paulo, SP"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">👤 Cliente</div>
+    <div class="form-grid">
+      <div class="form-group"><label>Nome do cliente *</label><input type="text" id="c-nome" placeholder="Ex: Maria Oliveira"></div>
+      <div class="form-group"><label>Contato do cliente</label><input type="text" id="c-contato" placeholder="Ex: (11) 98888-8888"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📋 Itens do orçamento</div>
+    <div class="items-head">
+      <span>Descrição</span>
+      <span class="h-qtd">Qtd</span>
+      <span class="h-unit">Valor unit.</span>
+      <span>Total</span>
+      <span></span>
+    </div>
+    <div id="items-list">
+      <div class="item-row">
+        <input type="text" class="f-desc" placeholder="Ex: Corte feminino">
+        <input type="number" class="f-qtd" min="1" step="1" value="1" oninput="calcularTotal()">
+        <div class="input-prefix f-unit"><span>R$</span><input type="number" min="0" step="0.01" placeholder="0,00" oninput="calcularTotal()"></div>
+        <div class="item-total f-total">R$ 0,00</div>
+        <button class="btn-remove" onclick="removerItem(this)">×</button>
+      </div>
+    </div>
+    <button class="btn-add" onclick="adicionarItem()">+ Adicionar item</button>
+    <div class="total-row">
+      <span class="total-label">Total do orçamento</span>
+      <span class="total-valor" id="grand-total">R$ 0,00</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">⚙️ Condições</div>
+    <div class="form-grid">
+      <div class="form-group"><label>Prazo de entrega</label><input type="text" id="o-prazo" placeholder="Ex: 3 dias úteis, na hora, sob consulta"></div>
+      <div class="form-group"><label>Validade do orçamento</label><select id="o-validade"><option value="7">7 dias</option><option value="15" selected>15 dias</option><option value="30">30 dias</option></select></div>
+      <div class="form-group"><label>Formas de pagamento</label><input type="text" id="o-pagamento" placeholder="Ex: Pix, cartão, 50% entrada + 50% entrega"></div>
+      <div class="form-group"><label>Número do orçamento</label><input type="text" id="o-numero" placeholder="Ex: 001, 2024-001"></div>
+      <div class="form-group full"><label>Observações</label><textarea id="o-obs" placeholder="Ex: Inclui materiais. Prazo começa após aprovação. Revisões ilimitadas por 30 dias..." style="min-height:64px"></textarea></div>
+    </div>
+  </div>
+
+  <button class="btn-generate" onclick="gerarOrcamento()" id="btn-gerar">📄 Gerar orçamento profissional</button>
+
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    <div class="loading-msg" id="loading-msg">Montando seu orçamento...</div>
+  </div>
+
+  <div class="results" id="results">
+    <hr>
+    <div class="results-top">
+      <div class="results-title">📄 Orçamento pronto</div>
+      <div style="display:flex;gap:8px">
+        <button class="btn-imprimir" onclick="imprimir()">🖨️ Imprimir / PDF</button>
+        <button class="btn-nova" onclick="resetar()">↩ Novo orçamento</button>
+      </div>
+    </div>
+    <div class="orcamento-doc" id="orcamento-doc"></div>
+    <div class="msg-wpp" id="msg-wpp">
+      <div class="msg-wpp-title">
+        💬 Mensagem para enviar no WhatsApp
+        <button class="btn-copiar-wpp" id="btn-cop-wpp" onclick="copiarWpp()">📋 Copiar</button>
+      </div>
+      <div class="msg-wpp-body" id="wpp-body"></div>
+    </div>
+  </div>
+</div>
+<div class="footer-strip">Simplifica <span>Aí</span> — Orça Aí</div>
+<script>
+function fmt(v){return'R$ '+v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}
+
+function calcularTotal(){
+  let grand=0;
+  document.querySelectorAll('#items-list .item-row').forEach(row=>{
+    const qtd=parseFloat(row.querySelector('.f-qtd').value)||0;
+    const unit=parseFloat(row.querySelector('.f-unit input').value)||0;
+    const total=qtd*unit;
+    row.querySelector('.f-total').textContent=fmt(total);
+    grand+=total;
+  });
+  document.getElementById('grand-total').textContent=fmt(grand);
+  return grand;
+}
+
+function adicionarItem(){
+  const list=document.getElementById('items-list');
+  const row=document.createElement('div');row.className='item-row';
+  row.innerHTML=`<input type="text" class="f-desc" placeholder="Descrição do item ou serviço">
+    <input type="number" class="f-qtd" min="1" step="1" value="1" oninput="calcularTotal()">
+    <div class="input-prefix f-unit"><span>R$</span><input type="number" min="0" step="0.01" placeholder="0,00" oninput="calcularTotal()"></div>
+    <div class="item-total f-total">R$ 0,00</div>
+    <button class="btn-remove" onclick="removerItem(this)">×</button>`;
+  list.appendChild(row);
+}
+
+function removerItem(btn){
+  const list=document.getElementById('items-list');
+  if(list.querySelectorAll('.item-row').length>1){btn.closest('.item-row').remove();calcularTotal();}
+}
+
+function getItens(){
+  const itens=[];
+  document.querySelectorAll('#items-list .item-row').forEach(row=>{
+    const desc=row.querySelector('.f-desc').value.trim();
+    const qtd=parseFloat(row.querySelector('.f-qtd').value)||1;
+    const unit=parseFloat(row.querySelector('.f-unit input').value)||0;
+    if(desc||unit>0) itens.push({desc:desc||'Item',qtd,unit,total:qtd*unit});
+  });
+  return itens;
+}
+
+const loadMsgs=['Organizando os itens...','Calculando os totais...','Montando o documento...','Gerando a mensagem para WhatsApp...','Finalizando...'];
+let loadInt;
+function iniciarLoad(){let i=0;const el=document.getElementById('loading-msg');el.textContent=loadMsgs[0];loadInt=setInterval(()=>{i=(i+1)%loadMsgs.length;el.textContent=loadMsgs[i];},1500)}
+function pararLoad(){clearInterval(loadInt)}
+
+let dadosGerados={};
+
+async function gerarOrcamento(){
+  const eNome=document.getElementById('e-nome').value.trim();
+  const cNome=document.getElementById('c-nome').value.trim();
+  if(!eNome){alert('Informe o nome da sua empresa.');document.getElementById('e-nome').focus();return;}
+  if(!cNome){alert('Informe o nome do cliente.');document.getElementById('c-nome').focus();return;}
+  const itens=getItens();
+  if(!itens.length||itens.every(i=>i.total===0)){alert('Adicione pelo menos um item com valor.');return;}
+
+  const total=calcularTotal();
+  const hoje=new Date();
+  const validade=parseInt(document.getElementById('o-validade').value)||15;
+  const dtValidade=new Date(hoje.getTime()+validade*86400000);
+  const numero=document.getElementById('o-numero').value.trim()||String(Date.now()).slice(-4);
+
+  dadosGerados={
+    empresa:{nome:eNome,tel:document.getElementById('e-tel').value.trim(),email:document.getElementById('e-email').value.trim(),cidade:document.getElementById('e-cidade').value.trim()},
+    cliente:{nome:cNome,contato:document.getElementById('c-contato').value.trim()},
+    itens,total,
+    prazo:document.getElementById('o-prazo').value.trim(),
+    pagamento:document.getElementById('o-pagamento').value.trim(),
+    obs:document.getElementById('o-obs').value.trim(),
+    numero,
+    dataEmissao:hoje.toLocaleDateString('pt-BR'),
+    dataValidade:dtValidade.toLocaleDateString('pt-BR'),
+    validade
+  };
+
+  document.getElementById('btn-gerar').disabled=true;
+  document.getElementById('loading').classList.add('show');
+  document.getElementById('results').classList.remove('show');
+  iniciarLoad();
+
+  // gera mensagem WhatsApp via IA
+  try{
+    const prompt=`Crie uma mensagem profissional e humanizada para enviar pelo WhatsApp junto com um orçamento. Tom: próximo, confiante, sem ser agressivo. Máximo 6 linhas. Sem travessão no meio de frases. Mencione o cliente pelo nome, o valor total e convide para tirar dúvidas.
+
+Empresa: ${eNome}
+Cliente: ${cNome}
+Total: ${fmt(total)}
+Prazo: ${dadosGerados.prazo||'a combinar'}
+Pagamento: ${dadosGerados.pagamento||'a combinar'}
+Validade: ${validade} dias
+
+Retorne SOMENTE o texto da mensagem, sem aspas, sem markdown.`;
+    const res=await fetch('/api/gerar',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:300,messages:[{role:'user',content:prompt}]})});
+    const data=await res.json();
+    dadosGerados.wppMsg=data.content?.map(b=>b.text||'').join('')||'';
+  }catch(e){
+    dadosGerados.wppMsg=`Olá, ${cNome}! Segue o orçamento conforme solicitado.\n\nTotal: ${fmt(total)}\nValidade: ${validade} dias\n\nQualquer dúvida, estou à disposição! 😊`;
+  }
+
+  pararLoad();
+  document.getElementById('loading').classList.remove('show');
+  document.getElementById('btn-gerar').disabled=false;
+  renderOrcamento(dadosGerados);
+}
+
+function renderOrcamento(d){
+  const itensHTML=d.itens.map(i=>`
+    <tr>
+      <td class="item-name">${esc(i.desc)}</td>
+      <td style="text-align:center">${i.qtd}</td>
+      <td style="text-align:right">${fmt(i.unit)}</td>
+      <td style="text-align:right;font-weight:500;color:var(--azul)">${fmt(i.total)}</td>
+    </tr>`).join('');
+
+  document.getElementById('orcamento-doc').innerHTML=`
+    <div class="doc-header">
+      <div class="doc-empresa">
+        <div class="doc-empresa-nome">${esc(d.empresa.nome)}</div>
+        <div class="doc-empresa-info">
+          ${d.empresa.tel?d.empresa.tel+'<br>':''}
+          ${d.empresa.email?d.empresa.email+'<br>':''}
+          ${d.empresa.cidade||''}
+        </div>
+      </div>
+      <div class="doc-orcamento-info">
+        <div class="doc-orcamento-num">ORÇAMENTO Nº ${esc(d.numero)}</div>
+        <div class="doc-orcamento-data">Emissão: ${d.dataEmissao}</div>
+        <div class="doc-orcamento-data">Válido até: ${d.dataValidade}</div>
+      </div>
+    </div>
+    <div class="doc-body">
+      <div class="doc-cliente">
+        <div class="doc-cliente-label">Cliente</div>
+        <div class="doc-cliente-nome">${esc(d.cliente.nome)}</div>
+        ${d.cliente.contato?`<div class="doc-cliente-info">${esc(d.cliente.contato)}</div>`:''}
+      </div>
+      <table class="doc-table">
+        <thead><tr><th>Descrição</th><th style="text-align:center">Qtd</th><th style="text-align:right">Unit.</th><th style="text-align:right">Total</th></tr></thead>
+        <tbody>${itensHTML}</tbody>
+      </table>
+      <div class="doc-totais">
+        ${d.pagamento?`<div class="doc-total-row"><span>Pagamento</span><span>${esc(d.pagamento)}</span></div>`:''}
+        ${d.prazo?`<div class="doc-total-row"><span>Prazo de entrega</span><span>${esc(d.prazo)}</span></div>`:''}
+        <div class="doc-total-row final"><span>Total</span><span>${fmt(d.total)}</span></div>
+      </div>
+      ${d.obs?`<div class="doc-obs"><div class="doc-obs-label">Observações</div>${esc(d.obs)}</div>`:''}
+    </div>
+    <div class="doc-footer">
+      <span>Orçamento válido por <strong class="doc-validade">${d.validade} dias</strong> a partir da emissão</span>
+      <span>${esc(d.empresa.nome)}</span>
+    </div>`;
+
+  document.getElementById('wpp-body').textContent=d.wppMsg;
+  document.getElementById('results').classList.add('show');
+  document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+function copiarWpp(){
+  navigator.clipboard.writeText(document.getElementById('wpp-body').textContent).then(()=>{
+    const btn=document.getElementById('btn-cop-wpp');
+    btn.textContent='✅ Copiado!';btn.classList.add('copiado');
+    setTimeout(()=>{btn.textContent='📋 Copiar';btn.classList.remove('copiado');},2500);
+  });
+}
+
+function imprimir(){window.print()}
+
+function resetar(){
+  document.getElementById('results').classList.remove('show');
+  ['e-nome','e-tel','e-email','e-cidade','c-nome','c-contato','o-prazo','o-pagamento','o-obs','o-numero'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('items-list').innerHTML=`<div class="item-row"><input type="text" class="f-desc" placeholder="Ex: Corte feminino"><input type="number" class="f-qtd" min="1" step="1" value="1" oninput="calcularTotal()"><div class="input-prefix f-unit"><span>R$</span><input type="number" min="0" step="0.01" placeholder="0,00" oninput="calcularTotal()"></div><div class="item-total f-total">R$ 0,00</div><button class="btn-remove" onclick="removerItem(this)">×</button></div>`;
+  calcularTotal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>

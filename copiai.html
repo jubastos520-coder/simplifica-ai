@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Copiaí — É só copiar e usar</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --verde:#00b37e;
+  --verde2:#00d68f;
+  --verde-claro:#e6faf4;
+  --verde-mid:#b3f0dc;
+  --amarelo:#ffd166;
+  --laranja:#ff6b35;
+  --ink:#1a1a2e;
+  --ink2:#3d3d5c;
+  --ink3:#8888a8;
+  --bg:#f7f8fc;
+  --bg2:#eef0f8;
+  --white:#ffffff;
+  --border:#e0e3f0;
+  --radius:14px;
+  --shadow:0 2px 16px rgba(26,26,46,0.08);
+  --shadow-lg:0 8px 32px rgba(26,26,46,0.13);
+}
+
+body{font-family:'Nunito Sans',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;font-size:15px;line-height:1.6}
+
+/* HEADER */
+.header{
+  background:var(--ink);
+  padding:0 28px;
+  height:62px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100;
+  border-bottom:3px solid var(--verde);
+}
+.logo{font-family:'Nunito',sans-serif;font-weight:900;font-size:24px;color:white;letter-spacing:-0.5px}
+.logo-tag{font-family:'Nunito Sans',sans-serif;font-size:11px;font-weight:600;color:var(--ink3);letter-spacing:0.4px;margin-top:2px}
+.header-right{display:flex;align-items:center;gap:10px}
+.pill{background:var(--verde);color:white;font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;letter-spacing:0.4px;font-family:'Nunito',sans-serif}
+
+/* HERO STRIP */
+.hero{
+  background:linear-gradient(135deg,var(--ink) 0%,#2d2d5e 100%);
+  padding:28px 28px 24px;
+  text-align:center;
+}
+.hero-title{font-family:'Nunito',sans-serif;font-weight:900;font-size:28px;color:white;letter-spacing:-0.5px;margin-bottom:6px}
+.hero-title span{color:var(--verde2)}
+.hero-sub{font-size:14px;color:#aaaacc;font-weight:400}
+
+/* CONTAINER */
+.container{max-width:860px;margin:0 auto;padding:28px 20px 72px}
+
+/* TABS */
+.tabs{
+  display:flex;gap:6px;
+  background:var(--white);
+  border:1.5px solid var(--border);
+  border-radius:var(--radius);
+  padding:5px;
+  margin-bottom:24px;
+  box-shadow:var(--shadow);
+}
+.tab{
+  flex:1;padding:10px 8px;
+  border:none;background:transparent;
+  border-radius:10px;
+  font-family:'Nunito',sans-serif;font-weight:700;font-size:13px;
+  color:var(--ink3);cursor:pointer;
+  transition:all .2s;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  white-space:nowrap;
+}
+.tab.active{background:var(--ink);color:white;box-shadow:var(--shadow)}
+.tab:not(.active):hover{background:var(--bg2);color:var(--ink2)}
+.tab-saved{width:6px;height:6px;border-radius:50%;background:var(--verde2);display:none;flex-shrink:0}
+.tab.has-data .tab-saved{display:inline-block}
+
+/* PANEL */
+.panel{display:none}
+.panel.active{display:block}
+
+/* SECTION HEADER */
+.section-head{margin-bottom:22px}
+.section-title{font-family:'Nunito',sans-serif;font-weight:900;font-size:22px;color:var(--ink);margin-bottom:4px}
+.section-sub{font-size:13px;color:var(--ink3)}
+
+/* CARD */
+.card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);padding:22px;margin-bottom:16px;box-shadow:var(--shadow)}
+.card-title{font-family:'Nunito',sans-serif;font-weight:800;font-size:13px;color:var(--ink2);text-transform:uppercase;letter-spacing:0.7px;margin-bottom:14px;display:flex;align-items:center;gap:7px}
+.card-title-icon{font-size:15px}
+
+/* FORM */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-group.full{grid-column:1/-1}
+label{font-family:'Nunito',sans-serif;font-weight:700;font-size:11px;color:var(--ink2);text-transform:uppercase;letter-spacing:0.6px}
+input,select,textarea{
+  font-family:'Nunito Sans',sans-serif;font-size:14px;color:var(--ink);
+  background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 13px;transition:all .2s;outline:none;width:100%;resize:vertical;
+}
+input:focus,select:focus,textarea:focus{border-color:var(--verde);background:white;box-shadow:0 0 0 3px rgba(0,179,126,0.1)}
+textarea{min-height:80px}
+
+/* SAVE BTN */
+.btn-save{
+  margin-top:18px;
+  background:var(--ink);color:white;border:none;
+  padding:13px 26px;border-radius:10px;
+  font-family:'Nunito',sans-serif;font-weight:800;font-size:14px;
+  cursor:pointer;transition:all .2s;
+  display:inline-flex;align-items:center;gap:8px;
+}
+.btn-save:hover{background:var(--ink2)}
+.btn-save:active{transform:scale(.98)}
+.saved-ok{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--verde);margin-top:14px;opacity:0;transition:opacity .4s;font-family:'Nunito',sans-serif}
+.saved-ok.show{opacity:1}
+
+/* BRIEFING PREVIEW */
+.briefing-bar{
+  background:var(--verde-claro);border:1.5px solid var(--verde-mid);
+  border-radius:var(--radius);padding:14px 18px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  margin-bottom:20px;
+}
+.briefing-bar-info{}
+.briefing-bar-name{font-family:'Nunito',sans-serif;font-weight:800;font-size:15px;color:var(--ink)}
+.briefing-bar-meta{font-size:12px;color:#3a7a62;margin-top:2px}
+.btn-editar{
+  background:white;border:1.5px solid var(--verde-mid);color:#3a7a62;
+  padding:7px 14px;border-radius:8px;font-family:'Nunito',sans-serif;font-weight:700;font-size:12px;
+  cursor:pointer;transition:all .2s;white-space:nowrap;
+}
+.btn-editar:hover{border-color:var(--verde);color:var(--verde)}
+.no-briefing{
+  background:#fff8ed;border:1.5px dashed #f5c97a;border-radius:var(--radius);
+  padding:14px 18px;margin-bottom:20px;
+  font-size:14px;color:#a07020;font-weight:600;font-family:'Nunito',sans-serif;
+  display:flex;align-items:center;gap:10px;
+}
+
+/* CONTEXT */
+.context-area{margin-bottom:18px}
+.context-area label{display:block;margin-bottom:8px}
+.context-area textarea{min-height:100px}
+
+/* FORMAT GRID */
+.formats-label{font-family:'Nunito',sans-serif;font-weight:700;font-size:11px;color:var(--ink2);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:10px}
+.formats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px}
+.format-item{
+  background:var(--white);border:2px solid var(--border);border-radius:10px;
+  padding:12px 10px;cursor:pointer;transition:all .2s;
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  user-select:none;
+}
+.format-item input{display:none}
+.format-item .f-icon{font-size:22px;line-height:1}
+.format-item .f-label{font-family:'Nunito',sans-serif;font-weight:700;font-size:11px;color:var(--ink3);text-align:center;line-height:1.3}
+.format-item.selected{border-color:var(--verde);background:var(--verde-claro)}
+.format-item.selected .f-label{color:var(--verde)}
+.format-item:hover:not(.selected){border-color:var(--ink3);background:var(--bg2)}
+
+/* GENERATE */
+.btn-generate{
+  width:100%;background:var(--verde);color:white;border:none;
+  padding:16px;border-radius:var(--radius);
+  font-family:'Nunito',sans-serif;font-weight:900;font-size:16px;
+  cursor:pointer;transition:all .2s;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  letter-spacing:0.2px;
+  box-shadow:0 4px 20px rgba(0,179,126,0.3);
+}
+.btn-generate:hover{background:var(--verde2);box-shadow:0 6px 24px rgba(0,214,143,0.35)}
+.btn-generate:active{transform:scale(.99)}
+.btn-generate:disabled{background:var(--ink3);box-shadow:none;cursor:not-allowed}
+
+/* LOADING */
+.loading{display:none;flex-direction:column;align-items:center;gap:14px;padding:44px 20px;text-align:center}
+.loading.show{display:flex}
+.spinner{width:40px;height:40px;border:3px solid var(--bg2);border-top-color:var(--verde);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-msg{font-size:14px;color:var(--ink3);font-style:italic}
+
+/* RESULTS */
+.results{display:none;margin-top:24px}
+.results.show{display:block}
+.results-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.results-title{font-family:'Nunito',sans-serif;font-weight:900;font-size:18px;color:var(--ink)}
+.btn-nova{
+  background:none;border:1.5px solid var(--border);color:var(--ink3);
+  padding:8px 16px;border-radius:8px;font-family:'Nunito',sans-serif;font-weight:700;font-size:12px;
+  cursor:pointer;transition:all .2s;
+}
+.btn-nova:hover{border-color:var(--ink2);color:var(--ink2)}
+
+/* COPY CARDS */
+.copy-card{
+  background:white;border:1.5px solid var(--border);border-radius:var(--radius);
+  margin-bottom:14px;overflow:hidden;box-shadow:var(--shadow);
+  animation:fadeUp .4s ease both;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.copy-card:nth-child(2){animation-delay:.08s}
+.copy-card:nth-child(3){animation-delay:.16s}
+.copy-card:nth-child(4){animation-delay:.24s}
+.copy-card:nth-child(5){animation-delay:.32s}
+.copy-card:nth-child(6){animation-delay:.40s}
+
+.copy-card-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 16px;border-bottom:1px solid var(--bg2);background:var(--bg);
+}
+.copy-card-label{display:flex;align-items:center;gap:8px;font-family:'Nunito',sans-serif;font-weight:800;font-size:12px;color:var(--ink2);text-transform:uppercase;letter-spacing:0.6px}
+.c-icon{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.ci-ig{background:#fce8f0}
+.ci-ads{background:#e8f0fc}
+.ci-wpp{background:#e8fce8}
+.ci-com{background:#fff3e0}
+.ci-avi{background:#f3e5f5}
+.ci-pro{background:#e8f5e9}
+
+.btn-copiar{
+  background:none;border:1.5px solid var(--border);color:var(--ink3);
+  padding:6px 12px;border-radius:7px;font-family:'Nunito',sans-serif;font-weight:700;font-size:11px;
+  cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:5px;
+}
+.btn-copiar:hover{border-color:var(--verde);color:var(--verde)}
+.btn-copiar.copiado{border-color:var(--verde);color:var(--verde);background:var(--verde-claro)}
+.copy-card-body{padding:16px;font-size:14px;line-height:1.8;color:var(--ink2);white-space:pre-wrap}
+
+/* DIVIDER */
+hr{border:none;border-top:1px solid var(--border);margin:24px 0}
+
+/* FOOTER STRIP */
+.footer-strip{
+  background:var(--ink);text-align:center;padding:14px;
+  font-size:12px;color:var(--ink3);font-family:'Nunito',sans-serif;font-weight:600;
+  position:fixed;bottom:0;left:0;right:0;
+  border-top:2px solid var(--verde);
+}
+.footer-strip span{color:var(--verde2)}
+
+@media(max-width:600px){
+  .form-grid{grid-template-columns:1fr}
+  .formats-grid{grid-template-columns:repeat(2,1fr)}
+  .hero-title{font-size:22px}
+  .tabs{gap:3px}
+  .tab{font-size:12px;padding:9px 6px}
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div>
+    <div class="logo" style="letter-spacing:0">Copi<span style="color:var(--verde2)">aí</span></div>
+    <div class="logo-tag">É só copiar e usar.</div>
+  </div>
+  <div class="header-right">
+    <span class="pill">BETA</span>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-title">Textos prontos para o seu <span>negócio</span></div>
+  <div class="hero-sub">Preencha uma vez. Gere copies profissionais em segundos.</div>
+</div>
+
+<div class="container">
+
+  <div class="tabs">
+    <button class="tab active" onclick="irAba('briefing')" id="tab-briefing">
+      🏢 <span>Minha Empresa</span>
+      <span class="tab-saved" id="dot-briefing"></span>
+    </button>
+    <button class="tab" onclick="irAba('gerador')" id="tab-gerador">
+      ✨ <span>Gerar Textos</span>
+    </button>
+  </div>
+
+  <!-- PAINEL BRIEFING -->
+  <div class="panel active" id="panel-briefing">
+    <div class="section-head">
+      <div class="section-title">Dados da empresa</div>
+      <div class="section-sub">Preencha uma vez. O Copiaí usa sempre que você gerar um texto.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="card-title-icon">🏢</span> Informações básicas</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Nome da empresa *</label>
+          <input type="text" id="b-nome" placeholder="Ex: Escola Novo Horizonte">
+        </div>
+        <div class="form-group">
+          <label>Setor *</label>
+          <select id="b-setor">
+            <option value="">Selecione...</option>
+            <option>Educação / Escola</option>
+            <option>Saúde / Clínica</option>
+            <option>Varejo / Loja</option>
+            <option>Serviços / Consultoria</option>
+            <option>Gastronomia / Restaurante</option>
+            <option>Beleza / Estética</option>
+            <option>Imobiliário</option>
+            <option>Academia / Fitness</option>
+            <option>Tecnologia</option>
+            <option>Igreja / Ministério</option>
+            <option>Outro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Público-alvo *</label>
+          <input type="text" id="b-publico" placeholder="Ex: Pais de alunos do ensino fundamental">
+        </div>
+        <div class="form-group">
+          <label>Cidade / Estado</label>
+          <input type="text" id="b-cidade" placeholder="Ex: Campinas, SP">
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="card-title-icon">💡</span> Identidade da marca</div>
+      <div class="form-grid">
+        <div class="form-group full">
+          <label>O que diferencia a sua empresa</label>
+          <textarea id="b-proposta" placeholder="Ex: Atendimento humanizado, preços acessíveis, equipe especializada, localização central..."></textarea>
+        </div>
+        <div class="form-group full">
+          <label>Como você quer que a empresa seja vista</label>
+          <textarea id="b-tom" placeholder="Ex: Próxima, confiável, acolhedora. Linguagem simples, sem termos difíceis. Evitar tom muito formal." style="min-height:68px"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="card-title-icon">📞</span> Contato e chamada para ação</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>CTA preferido</label>
+          <input type="text" id="b-cta" placeholder="Ex: Fale pelo WhatsApp / Agende agora">
+        </div>
+        <div class="form-group">
+          <label>Canal de contato</label>
+          <input type="text" id="b-contato" placeholder="Ex: (11) 99999-9999 / @empresa">
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-save" onclick="salvarBriefing()">💾 Salvar dados da empresa</button>
+    <div class="saved-ok" id="saved-ok">✅ Dados salvos com sucesso!</div>
+  </div>
+
+  <!-- PAINEL GERADOR -->
+  <div class="panel" id="panel-gerador">
+
+    <div id="briefing-status"></div>
+
+    <div class="section-head">
+      <div class="section-title">O que você precisa hoje?</div>
+      <div class="section-sub">Descreva a situação e escolha os formatos. O Copiaí escreve por você.</div>
+    </div>
+
+    <div class="card context-area">
+      <label>Contexto ou assunto do texto *</label>
+      <textarea id="g-contexto" placeholder="Ex: Campanha de matrícula para 2026, foco em captação de novos alunos. Quero destacar a infraestrutura da escola e os resultados dos alunos no vestibular.&#10;&#10;Ou: Promoção de verão com 20% de desconto em todos os serviços durante o mês de janeiro."></textarea>
+    </div>
+
+    <div class="formats-label">Escolha os formatos que quer gerar</div>
+    <div class="formats-grid">
+      <label class="format-item selected" id="chip-ig">
+        <input type="checkbox" checked onchange="toggleChip('chip-ig',this)">
+        <span class="f-icon">📸</span>
+        <span class="f-label">Legenda Instagram</span>
+      </label>
+      <label class="format-item selected" id="chip-ads">
+        <input type="checkbox" checked onchange="toggleChip('chip-ads',this)">
+        <span class="f-icon">🎯</span>
+        <span class="f-label">Anúncio Meta Ads</span>
+      </label>
+      <label class="format-item selected" id="chip-wpp">
+        <input type="checkbox" checked onchange="toggleChip('chip-wpp',this)">
+        <span class="f-icon">💬</span>
+        <span class="f-label">Mensagem WhatsApp</span>
+      </label>
+      <label class="format-item selected" id="chip-com">
+        <input type="checkbox" checked onchange="toggleChip('chip-com',this)">
+        <span class="f-icon">📢</span>
+        <span class="f-label">Comunicado</span>
+      </label>
+      <label class="format-item selected" id="chip-avi">
+        <input type="checkbox" checked onchange="toggleChip('chip-avi',this)">
+        <span class="f-icon">🖨️</span>
+        <span class="f-label">Aviso Impresso</span>
+      </label>
+      <label class="format-item selected" id="chip-pro">
+        <input type="checkbox" checked onchange="toggleChip('chip-pro',this)">
+        <span class="f-icon">🏷️</span>
+        <span class="f-label">Promoção / Oferta</span>
+      </label>
+    </div>
+
+    <button class="btn-generate" onclick="gerarCopy()" id="btn-generate">
+      ✨ Gerar meus textos agora
+    </button>
+
+    <div class="loading" id="loading">
+      <div class="spinner"></div>
+      <div class="loading-msg" id="loading-msg">Analisando os dados da empresa...</div>
+    </div>
+
+    <div class="results" id="results">
+      <hr>
+      <div class="results-top">
+        <div class="results-title">✅ Textos prontos para usar</div>
+        <button class="btn-nova" onclick="resetar()">↩ Nova geração</button>
+      </div>
+      <div id="cards-container"></div>
+    </div>
+
+  </div>
+</div>
+
+<div class="footer-strip">Copiaí — <span>É só copiar e usar.</span></div>
+
+<script>
+function salvar(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+function carregar(k){try{const v=localStorage.getItem(k);return v?JSON.parse(v):null}catch(e){return null}}
+
+function irAba(aba){
+  document.querySelectorAll('.tab,.panel').forEach(el=>el.classList.remove('active'));
+  document.getElementById('tab-'+aba).classList.add('active');
+  document.getElementById('panel-'+aba).classList.add('active');
+  if(aba==='gerador') renderStatus();
+}
+
+function toggleChip(id,cb){
+  document.getElementById(id).classList.toggle('selected',cb.checked);
+}
+
+function salvarBriefing(){
+  const d={
+    nome:document.getElementById('b-nome').value.trim(),
+    setor:document.getElementById('b-setor').value,
+    publico:document.getElementById('b-publico').value.trim(),
+    cidade:document.getElementById('b-cidade').value.trim(),
+    proposta:document.getElementById('b-proposta').value.trim(),
+    tom:document.getElementById('b-tom').value.trim(),
+    cta:document.getElementById('b-cta').value.trim(),
+    contato:document.getElementById('b-contato').value.trim(),
+  };
+  if(!d.nome||!d.setor||!d.publico){alert('Preencha pelo menos: nome da empresa, setor e público-alvo.');return;}
+  salvar('copiai_briefing',d);
+  document.getElementById('tab-briefing').classList.add('has-data');
+  const ok=document.getElementById('saved-ok');
+  ok.classList.add('show');
+  setTimeout(()=>ok.classList.remove('show'),3000);
+}
+
+function carregarFormulario(){
+  const d=carregar('copiai_briefing');
+  if(!d) return;
+  document.getElementById('b-nome').value=d.nome||'';
+  document.getElementById('b-setor').value=d.setor||'';
+  document.getElementById('b-publico').value=d.publico||'';
+  document.getElementById('b-cidade').value=d.cidade||'';
+  document.getElementById('b-proposta').value=d.proposta||'';
+  document.getElementById('b-tom').value=d.tom||'';
+  document.getElementById('b-cta').value=d.cta||'';
+  document.getElementById('b-contato').value=d.contato||'';
+  document.getElementById('tab-briefing').classList.add('has-data');
+}
+
+function renderStatus(){
+  const d=carregar('copiai_briefing');
+  const el=document.getElementById('briefing-status');
+  if(!d||!d.nome){
+    el.innerHTML=`<div class="no-briefing">⚠️ Você ainda não salvou os dados da empresa. <strong style="margin-left:4px">Configure antes de gerar.</strong></div>`;
+  } else {
+    el.innerHTML=`<div class="briefing-bar">
+      <div class="briefing-bar-info">
+        <div class="briefing-bar-name">${d.nome}</div>
+        <div class="briefing-bar-meta">${d.setor}${d.cidade?' · '+d.cidade:''}${d.publico?' · '+d.publico:''}</div>
+      </div>
+      <button class="btn-editar" onclick="irAba('briefing')">✏️ Editar</button>
+    </div>`;
+  }
+}
+
+const msgs=['Analisando os dados da empresa...','Estruturando os argumentos...','Aplicando o tom de voz da marca...','Escrevendo os textos...','Revisando e finalizando...'];
+let msgInterval;
+
+function iniciarLoading(){
+  let i=0;
+  const el=document.getElementById('loading-msg');
+  el.textContent=msgs[0];
+  msgInterval=setInterval(()=>{i=(i+1)%msgs.length;el.textContent=msgs[i];},2000);
+}
+function pararLoading(){clearInterval(msgInterval);}
+
+const formatos=[
+  {key:'instagram',chip:'chip-ig',label:'Legenda Instagram',icon:'📸',cls:'ci-ig'},
+  {key:'meta_ads',chip:'chip-ads',label:'Anúncio Meta Ads',icon:'🎯',cls:'ci-ads'},
+  {key:'whatsapp',chip:'chip-wpp',label:'Mensagem WhatsApp',icon:'💬',cls:'ci-wpp'},
+  {key:'comunicado',chip:'chip-com',label:'Comunicado',icon:'📢',cls:'ci-com'},
+  {key:'aviso_impresso',chip:'chip-avi',label:'Aviso Impresso',icon:'🖨️',cls:'ci-avi'},
+  {key:'promocao',chip:'chip-pro',label:'Promoção / Oferta',icon:'🏷️',cls:'ci-pro'},
+];
+
+const instrucoes={
+  instagram:'INSTAGRAM: Legenda até 160 palavras. Use storytelling ou dor/solução. Emojis estratégicos (máx 4). Hashtags ao final (3 a 5). CTA claro.',
+  meta_ads:'META_ADS: Headline impactante na 1ª linha (máx 8 palavras). Corpo de 3 a 4 frases curtas. Benefício principal em destaque. CTA direto e urgente.',
+  whatsapp:'WHATSAPP: Mensagem comercial próxima e humana. 4 a 5 parágrafos curtos. Tom pessoal. CTA com ação específica ao final.',
+  comunicado:'COMUNICADO: Texto formal mas acessível para comunicar informações importantes. Título claro, corpo objetivo, assinatura da empresa ao final.',
+  aviso_impresso:'AVISO_IMPRESSO: Texto curto e direto para cartaz ou folha impressa. Título grande e chamativo, informações essenciais, visual de fácil leitura. Máx 80 palavras.',
+  promocao:'PROMOCAO: Texto de oferta com urgência e valor claro. Destaque o benefício principal, o desconto ou condição especial, e o prazo ou limite. CTA forte.',
+};
+
+async function gerarCopy(){
+  const briefing=carregar('copiai_briefing');
+  if(!briefing||!briefing.nome){alert('Configure os dados da empresa primeiro (aba "Minha Empresa").');irAba('briefing');return;}
+  const contexto=document.getElementById('g-contexto').value.trim();
+  if(!contexto){alert('Descreva o contexto do texto que você precisa.');document.getElementById('g-contexto').focus();return;}
+
+  const selecionados=formatos.filter(f=>document.getElementById(f.chip).classList.contains('selected'));
+  if(!selecionados.length){alert('Selecione pelo menos um formato.');return;}
+
+  document.getElementById('btn-generate').disabled=true;
+  document.getElementById('loading').classList.add('show');
+  document.getElementById('results').classList.remove('show');
+  document.getElementById('cards-container').innerHTML='';
+  iniciarLoading();
+
+  const chaves=selecionados.map(f=>f.key);
+  const instr=selecionados.map(f=>instrucoes[f.key]).join('\n');
+
+  const system=`Você é um copywriter profissional especialista em comunicação para pequenas e médias empresas brasileiras. Cria textos persuasivos, humanos e com alta conversão. Nunca use travessão no meio de frases. Use linguagem natural e brasileira. Sem clichês. Finalize sempre com CTA claro.
+
+Responda SOMENTE com JSON válido, sem markdown, sem texto fora do JSON. Formato:
+{
+  "instagram": "...",
+  "meta_ads": "...",
+  "whatsapp": "...",
+  "comunicado": "...",
+  "aviso_impresso": "...",
+  "promocao": "..."
+}
+Inclua APENAS as chaves solicitadas: ${chaves.join(', ')}.`;
+
+  const user=`Empresa: ${briefing.nome}
+Setor: ${briefing.setor}
+Público-alvo: ${briefing.publico}
+${briefing.cidade?'Cidade: '+briefing.cidade:''}
+${briefing.proposta?'Diferenciais: '+briefing.proposta:''}
+${briefing.tom?'Tom de voz: '+briefing.tom:''}
+${briefing.cta?'CTA preferido: '+briefing.cta:''}
+${briefing.contato?'Contato: '+briefing.contato:''}
+
+Contexto / assunto: ${contexto}
+
+Formatos solicitados:
+${instr}
+
+Gere os textos agora.`;
+
+  try{
+    const res=await fetch('/api/gerar',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system,messages:[{role:'user',content:user}]})
+    });
+    const data=await res.json();
+    const raw=data.content?.map(b=>b.text||'').join('')||'';
+    let parsed;
+    try{parsed=JSON.parse(raw.replace(/```json|```/g,'').trim())}
+    catch(e){throw new Error('Formato de resposta inválido.')}
+    pararLoading();
+    document.getElementById('loading').classList.remove('show');
+    document.getElementById('btn-generate').disabled=false;
+    renderCards(parsed,selecionados);
+  }catch(err){
+    pararLoading();
+    document.getElementById('loading').classList.remove('show');
+    document.getElementById('btn-generate').disabled=false;
+    alert('Erro ao gerar textos: '+err.message);
+  }
+}
+
+function renderCards(data,selecionados){
+  const container=document.getElementById('cards-container');
+  container.innerHTML='';
+  selecionados.forEach(f=>{
+    if(!data[f.key]) return;
+    const card=document.createElement('div');
+    card.className='copy-card';
+    card.innerHTML=`
+      <div class="copy-card-head">
+        <div class="copy-card-label">
+          <span class="c-icon ${f.cls}">${f.icon}</span>${f.label}
+        </div>
+        <button class="btn-copiar" onclick="copiar(this,'body-${f.key}')">📋 Copiar</button>
+      </div>
+      <div class="copy-card-body" id="body-${f.key}">${esc(data[f.key])}</div>`;
+    container.appendChild(card);
+  });
+  document.getElementById('results').classList.add('show');
+  document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+function copiar(btn,id){
+  const txt=document.getElementById(id).textContent;
+  navigator.clipboard.writeText(txt).then(()=>{
+    btn.textContent='✅ Copiado!';btn.classList.add('copiado');
+    setTimeout(()=>{btn.textContent='📋 Copiar';btn.classList.remove('copiado');},2500);
+  });
+}
+
+function resetar(){
+  document.getElementById('results').classList.remove('show');
+  document.getElementById('g-contexto').value='';
+  document.getElementById('g-contexto').focus();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// Init
+carregarFormulario();
+renderStatus();
+</script>
+</body>
+</html>

@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Precifica Aí — Descubra o preço certo do seu produto ou serviço</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --azul:#0066ff;--azul2:#3385ff;--azul-claro:#eef4ff;--azul-mid:#b3cfff;
+  --verde:#00b37e;--verde-claro:#e6faf4;
+  --vermelho:#e53e3e;--vermelho-claro:#fff5f5;
+  --amarelo:#f6ad55;--amarelo-claro:#fffaf0;
+  --ink:#1a1a2e;--ink2:#3d3d5c;--ink3:#8888a8;
+  --bg:#f7f8fc;--bg2:#eef0f8;--white:#ffffff;--border:#e0e3f0;
+  --radius:14px;--shadow:0 2px 16px rgba(26,26,46,0.08);
+}
+body{font-family:'Nunito Sans',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;font-size:15px;line-height:1.6}
+
+.header{background:var(--ink);padding:0 28px;height:62px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;border-bottom:3px solid var(--azul)}
+.logo{font-family:'Nunito',sans-serif;font-weight:900;font-size:22px;color:white}
+.logo span{color:var(--azul2)}
+.logo-tag{font-size:11px;font-weight:600;color:var(--ink3);letter-spacing:0.4px;margin-top:1px;font-family:'Nunito Sans',sans-serif}
+.pill{background:var(--azul);color:white;font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;letter-spacing:0.4px;font-family:'Nunito',sans-serif}
+
+.hero{background:linear-gradient(135deg,var(--ink) 0%,#2d2d5e 100%);padding:24px 28px 20px;text-align:center}
+.hero-title{font-family:'Nunito',sans-serif;font-weight:900;font-size:26px;color:white;letter-spacing:-0.5px;margin-bottom:4px}
+.hero-title span{color:var(--azul2)}
+.hero-sub{font-size:13px;color:#aaaacc}
+
+.container{max-width:860px;margin:0 auto;padding:28px 20px 72px}
+
+.tabs{display:flex;gap:6px;background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);padding:5px;margin-bottom:24px;box-shadow:var(--shadow)}
+.tab{flex:1;padding:10px 8px;border:none;background:transparent;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:700;font-size:13px;color:var(--ink3);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap}
+.tab.active{background:var(--ink);color:white;box-shadow:var(--shadow)}
+.tab:not(.active):hover{background:var(--bg2);color:var(--ink2)}
+
+.panel{display:none}.panel.active{display:block}
+
+.section-title{font-family:'Nunito',sans-serif;font-weight:900;font-size:20px;color:var(--ink);margin-bottom:4px}
+.section-sub{font-size:13px;color:var(--ink3);margin-bottom:20px}
+
+.card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:14px;box-shadow:var(--shadow)}
+.card-title{font-family:'Nunito',sans-serif;font-weight:800;font-size:12px;color:var(--ink2);text-transform:uppercase;letter-spacing:0.7px;margin-bottom:14px;display:flex;align-items:center;gap:7px}
+
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-group{display:flex;flex-direction:column;gap:5px}
+.form-group.full{grid-column:1/-1}
+label{font-family:'Nunito',sans-serif;font-weight:700;font-size:11px;color:var(--ink2);text-transform:uppercase;letter-spacing:0.6px}
+.label-hint{font-size:11px;color:var(--ink3);font-weight:400;text-transform:none;letter-spacing:0}
+
+input,select,textarea{font-family:'Nunito Sans',sans-serif;font-size:14px;color:var(--ink);background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:10px 13px;transition:all .2s;outline:none;width:100%}
+input:focus,select:focus{border-color:var(--azul);background:white;box-shadow:0 0 0 3px rgba(0,102,255,0.08)}
+
+.input-prefix{position:relative}
+.input-prefix span{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--ink3);font-weight:600;pointer-events:none}
+.input-prefix input{padding-left:28px}
+
+/* linha de item variavel */
+.items-list{display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
+.item-row{display:grid;grid-template-columns:1fr 110px 36px;gap:8px;align-items:center}
+.item-row input{font-size:13px;padding:8px 11px}
+.btn-remove{background:none;border:1.5px solid var(--border);color:var(--ink3);width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:16px;transition:all .2s;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.btn-remove:hover{border-color:var(--vermelho);color:var(--vermelho)}
+.btn-add{background:none;border:1.5px dashed var(--border);color:var(--ink3);padding:8px 14px;border-radius:8px;font-family:'Nunito',sans-serif;font-weight:700;font-size:12px;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:6px;width:100%}
+.btn-add:hover{border-color:var(--azul);color:var(--azul);background:var(--azul-claro)}
+
+/* tipo negocio chips */
+.tipo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:4px}
+.tipo-card{background:var(--white);border:2px solid var(--border);border-radius:10px;padding:12px 8px;cursor:pointer;transition:all .2s;text-align:center;user-select:none}
+.tipo-card.selected{border-color:var(--azul);background:var(--azul-claro)}
+.tipo-card:hover:not(.selected){border-color:var(--ink3);background:var(--bg2)}
+.tipo-icon{font-size:22px;margin-bottom:4px}
+.tipo-nome{font-family:'Nunito',sans-serif;font-weight:700;font-size:12px;color:var(--ink2)}
+
+.btn-calcular{width:100%;background:var(--azul);color:white;border:none;padding:15px;border-radius:var(--radius);font-family:'Nunito',sans-serif;font-weight:900;font-size:16px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 4px 20px rgba(0,102,255,0.25);margin-top:4px}
+.btn-calcular:hover{background:var(--azul2)}
+.btn-calcular:active{transform:scale(.99)}
+
+/* RESULTADOS */
+.results{display:none;margin-top:24px;animation:fadeUp .4s ease}
+.results.show{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+.precos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+.preco-card{border-radius:var(--radius);padding:18px 16px;text-align:center}
+.preco-card.minimo{background:var(--vermelho-claro);border:1.5px solid #fca5a5}
+.preco-card.ideal{background:var(--azul-claro);border:2px solid var(--azul);box-shadow:0 4px 20px rgba(0,102,255,0.12)}
+.preco-card.mercado{background:var(--verde-claro);border:1.5px solid var(--verde)}
+.preco-label{font-family:'Nunito',sans-serif;font-weight:800;font-size:11px;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:6px}
+.preco-label.minimo{color:#b91c1c}
+.preco-label.ideal{color:var(--azul)}
+.preco-label.mercado{color:#065f46}
+.preco-valor{font-family:'Nunito',sans-serif;font-weight:900;font-size:26px;margin-bottom:4px}
+.preco-valor.minimo{color:#b91c1c}
+.preco-valor.ideal{color:var(--azul)}
+.preco-valor.mercado{color:#065f46}
+.preco-desc{font-size:11px;color:var(--ink3);line-height:1.4}
+
+.breakdown-card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:14px;box-shadow:var(--shadow)}
+.breakdown-title{font-family:'Nunito',sans-serif;font-weight:800;font-size:12px;color:var(--ink2);text-transform:uppercase;letter-spacing:0.6px;padding:12px 16px;background:var(--bg);border-bottom:1px solid var(--border)}
+.breakdown-row{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;border-bottom:0.5px solid var(--border)}
+.breakdown-row:last-child{border-bottom:none}
+.breakdown-row.total{background:var(--azul-claro);font-weight:700}
+.breakdown-key{font-size:13px;color:var(--ink2)}
+.breakdown-val{font-family:'Nunito',sans-serif;font-weight:700;font-size:13px;color:var(--ink)}
+.breakdown-val.negativo{color:var(--vermelho)}
+.breakdown-val.positivo{color:var(--verde)}
+.breakdown-val.destaque{color:var(--azul)}
+
+.analise-card{background:var(--amarelo-claro);border:1.5px solid #f6ad55;border-radius:var(--radius);padding:16px 18px;margin-bottom:14px}
+.analise-title{font-family:'Nunito',sans-serif;font-weight:800;font-size:13px;color:#7b4f12;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.analise-texto{font-size:13px;color:#7b4f12;line-height:1.7}
+
+.ia-card{background:var(--azul-claro);border:1.5px solid var(--azul-mid);border-radius:var(--radius);padding:16px 18px;margin-bottom:14px}
+.ia-title{font-family:'Nunito',sans-serif;font-weight:800;font-size:13px;color:#003399;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.ia-texto{font-size:13px;color:#003399;line-height:1.7;white-space:pre-wrap}
+
+.loading{display:none;flex-direction:column;align-items:center;gap:14px;padding:44px 20px;text-align:center}
+.loading.show{display:flex}
+.spinner{width:40px;height:40px;border:3px solid var(--bg2);border-top-color:var(--azul);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-msg{font-size:14px;color:var(--ink3);font-style:italic}
+
+.btn-nova{background:none;border:1.5px solid var(--border);color:var(--ink3);padding:10px 20px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:700;font-size:13px;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:7px;margin-top:8px}
+.btn-nova:hover{border-color:var(--ink2);color:var(--ink2)}
+
+.badge-recomendado{background:var(--azul);color:white;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;font-family:'Nunito',sans-serif;margin-bottom:8px;display:inline-block}
+
+hr{border:none;border-top:1px solid var(--border);margin:20px 0}
+
+.footer-strip{background:var(--ink);text-align:center;padding:14px;font-size:12px;color:var(--ink3);font-family:'Nunito',sans-serif;font-weight:600;position:fixed;bottom:0;left:0;right:0;border-top:2px solid var(--azul)}
+.footer-strip span{color:var(--azul2)}
+
+@media(max-width:600px){
+  .form-grid,.precos-grid{grid-template-columns:1fr}
+  .tipo-grid{grid-template-columns:repeat(2,1fr)}
+  .container{padding:20px 14px 72px}
+  .item-row{grid-template-columns:1fr 90px 36px}
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div>
+    <div class="logo">Precifica <span>Aí</span></div>
+    <div class="logo-tag">Descubra o preço certo. Pare de perder dinheiro.</div>
+  </div>
+  <span class="pill">BETA</span>
+</header>
+
+<div class="hero">
+  <div class="hero-title">Preço certo, <span>lucro real</span></div>
+  <div class="hero-sub">Informe seus custos e deixa o Precifica Aí calcular o preço ideal para você.</div>
+</div>
+
+<div class="container">
+
+  <div class="tabs">
+    <button class="tab active" onclick="irAba('produto')" id="tab-produto">🏷️ <span>Produto / Serviço</span></button>
+    <button class="tab" onclick="irAba('negocio')" id="tab-negocio">🏢 <span>Meu Negócio</span></button>
+  </div>
+
+  <!-- PAINEL PRODUTO -->
+  <div class="panel active" id="panel-produto">
+    <div class="section-title">O que você quer precificar?</div>
+    <p class="section-sub">Preencha os custos e defina sua margem. O cálculo é feito automaticamente.</p>
+
+    <div class="card">
+      <div class="card-title">🏷️ Tipo e nome</div>
+      <div class="tipo-grid">
+        <div class="tipo-card selected" id="tipo-produto" onclick="selecionarTipo('produto')">
+          <div class="tipo-icon">📦</div>
+          <div class="tipo-nome">Produto físico</div>
+        </div>
+        <div class="tipo-card" id="tipo-servico" onclick="selecionarTipo('servico')">
+          <div class="tipo-icon">🛠️</div>
+          <div class="tipo-nome">Serviço</div>
+        </div>
+        <div class="tipo-card" id="tipo-digital" onclick="selecionarTipo('digital')">
+          <div class="tipo-icon">💻</div>
+          <div class="tipo-nome">Produto digital</div>
+        </div>
+      </div>
+      <div style="margin-top:12px">
+        <div class="form-group">
+          <label>Nome do produto ou serviço</label>
+          <input type="text" id="p-nome" placeholder="Ex: Bolo de chocolate, Corte feminino, Curso de Excel">
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">💰 Custos diretos <span class="label-hint">(o que você gasta para produzir ou entregar uma unidade)</span></div>
+      <div class="items-list" id="custos-list">
+        <div class="item-row">
+          <input type="text" placeholder="Ex: Farinha, chocolate, embalagem" value="">
+          <div class="input-prefix"><span>R$</span><input type="number" min="0" step="0.01" placeholder="0,00" value=""></div>
+          <button class="btn-remove" onclick="removerItem(this)">×</button>
+        </div>
+      </div>
+      <button class="btn-add" onclick="adicionarCusto()">+ Adicionar custo</button>
+    </div>
+
+    <div class="card" id="card-horas">
+      <div class="card-title">⏱️ Tempo de execução <span class="label-hint">(para serviços e digitais)</span></div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Horas para produzir / entregar</label>
+          <input type="number" id="p-horas" min="0" step="0.5" placeholder="Ex: 2" value="">
+        </div>
+        <div class="form-group">
+          <label>Valor da sua hora <span class="label-hint">(quanto você quer ganhar por hora)</span></label>
+          <div class="input-prefix"><span>R$</span><input type="number" id="p-valor-hora" min="0" step="1" placeholder="Ex: 50"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📊 Margem e impostos</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Margem de lucro desejada (%)</label>
+          <input type="number" id="p-margem" min="0" max="200" step="1" placeholder="Ex: 40" value="40">
+        </div>
+        <div class="form-group">
+          <label>Impostos e taxas (%)</label>
+          <input type="number" id="p-impostos" min="0" max="50" step="0.1" placeholder="Ex: 6" value="6">
+        </div>
+        <div class="form-group">
+          <label>Taxa de cartão / marketplace (%)</label>
+          <input type="number" id="p-taxa-cartao" min="0" max="20" step="0.1" placeholder="Ex: 3" value="3">
+        </div>
+        <div class="form-group">
+          <label>Desconto máximo que aceita dar (%)</label>
+          <input type="number" id="p-desconto" min="0" max="50" step="1" placeholder="Ex: 10" value="10">
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-calcular" onclick="calcularPreco()">🧮 Calcular o preço ideal agora</button>
+
+    <div class="loading" id="loading">
+      <div class="spinner"></div>
+      <div class="loading-msg" id="loading-msg">Calculando seus custos...</div>
+    </div>
+
+    <div class="results" id="results">
+      <hr>
+      <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:18px;color:var(--ink);margin-bottom:16px">💰 Resultado da precificação</div>
+
+      <div class="precos-grid">
+        <div class="preco-card minimo">
+          <div class="preco-label minimo">Preço mínimo</div>
+          <div class="preco-valor minimo" id="r-minimo">R$ —</div>
+          <div class="preco-desc">Cobre custos mas não gera lucro real. Nunca venda abaixo disso.</div>
+        </div>
+        <div class="preco-card ideal">
+          <div class="badge-recomendado">⭐ Recomendado</div>
+          <div class="preco-label ideal">Preço ideal</div>
+          <div class="preco-valor ideal" id="r-ideal">R$ —</div>
+          <div class="preco-desc">Cobre tudo e garante o lucro que você definiu.</div>
+        </div>
+        <div class="preco-card mercado">
+          <div class="preco-label mercado">Com desconto</div>
+          <div class="preco-valor mercado" id="r-desconto">R$ —</div>
+          <div class="preco-desc">Preço mínimo aceitável em promoção ou negociação.</div>
+        </div>
+      </div>
+
+      <div class="breakdown-card">
+        <div class="breakdown-title">📋 Detalhamento do cálculo</div>
+        <div id="breakdown-rows"></div>
+      </div>
+
+      <div class="analise-card">
+        <div class="analise-title">💡 Análise e recomendações</div>
+        <div class="analise-texto" id="analise-texto">Calculando...</div>
+      </div>
+
+      <div class="ia-card">
+        <div class="ia-title">🤖 Análise estratégica de mercado</div>
+        <div class="ia-texto" id="ia-texto">Analisando seu negócio...</div>
+      </div>
+
+      <button class="btn-nova" onclick="resetar()">↩ Precificar outro produto</button>
+    </div>
+  </div>
+
+  <!-- PAINEL NEGÓCIO -->
+  <div class="panel" id="panel-negocio">
+    <div class="section-title">Despesas fixas do negócio</div>
+    <p class="section-sub">Informe o que você gasta todo mês, independente de vender ou não. Isso afeta o preço final.</p>
+
+    <div class="card">
+      <div class="card-title">🏢 Custos fixos mensais</div>
+      <div class="items-list" id="fixos-list">
+        <div class="item-row">
+          <input type="text" placeholder="Ex: Aluguel" value="Aluguel">
+          <div class="input-prefix"><span>R$</span><input type="number" min="0" step="1" placeholder="0,00" value=""></div>
+          <button class="btn-remove" onclick="removerItem(this)">×</button>
+        </div>
+        <div class="item-row">
+          <input type="text" placeholder="Ex: Internet e telefone" value="Internet e telefone">
+          <div class="input-prefix"><span>R$</span><input type="number" min="0" step="1" placeholder="0,00" value=""></div>
+          <button class="btn-remove" onclick="removerItem(this)">×</button>
+        </div>
+        <div class="item-row">
+          <input type="text" placeholder="Ex: Contador" value="Contador">
+          <div class="input-prefix"><span>R$</span><input type="number" min="0" step="1" placeholder="0,00" value=""></div>
+          <button class="btn-remove" onclick="removerItem(this)">×</button>
+        </div>
+      </div>
+      <button class="btn-add" onclick="adicionarFixo()">+ Adicionar despesa fixa</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📦 Volume de vendas esperado</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Quantas unidades vende por mês?</label>
+          <input type="number" id="n-volume" min="1" step="1" placeholder="Ex: 50" value="">
+        </div>
+        <div class="form-group">
+          <label>Pró-labore desejado (salário)</label>
+          <div class="input-prefix"><span>R$</span><input type="number" id="n-prolabore" min="0" step="100" placeholder="Ex: 3000"></div>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-calcular" onclick="salvarNegocio()" style="background:var(--verde);box-shadow:0 4px 20px rgba(0,179,126,0.25)">💾 Salvar dados do negócio</button>
+    <div class="saved-ok" id="saved-ok" style="display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--verde);margin-top:14px;opacity:0;transition:opacity .4s;font-family:'Nunito',sans-serif">✅ Dados salvos!</div>
+  </div>
+
+</div>
+
+<div class="footer-strip">Simplifica <span>Aí</span> — Precifica Aí</div>
+
+<script>
+function salvar(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+function carregar(k){try{const v=localStorage.getItem(k);return v?JSON.parse(v):null}catch(e){return null}}
+
+function irAba(aba){
+  document.querySelectorAll('.tab,.panel').forEach(el=>el.classList.remove('active'));
+  document.getElementById('tab-'+aba).classList.add('active');
+  document.getElementById('panel-'+aba).classList.add('active');
+}
+
+let tipoAtivo='produto';
+function selecionarTipo(tipo){
+  document.querySelectorAll('.tipo-card').forEach(c=>c.classList.remove('selected'));
+  document.getElementById('tipo-'+tipo).classList.add('selected');
+  tipoAtivo=tipo;
+  document.getElementById('card-horas').style.display=(tipo==='produto')?'none':'block';
+}
+selecionarTipo('produto');
+
+function adicionarCusto(){
+  const list=document.getElementById('custos-list');
+  const row=document.createElement('div');
+  row.className='item-row';
+  row.innerHTML=`<input type="text" placeholder="Ex: Matéria prima, embalagem...">
+    <div class="input-prefix"><span>R$</span><input type="number" min="0" step="0.01" placeholder="0,00"></div>
+    <button class="btn-remove" onclick="removerItem(this)">×</button>`;
+  list.appendChild(row);
+}
+
+function adicionarFixo(){
+  const list=document.getElementById('fixos-list');
+  const row=document.createElement('div');
+  row.className='item-row';
+  row.innerHTML=`<input type="text" placeholder="Ex: Energia elétrica, marketing...">
+    <div class="input-prefix"><span>R$</span><input type="number" min="0" step="1" placeholder="0,00"></div>
+    <button class="btn-remove" onclick="removerItem(this)">×</button>`;
+  list.appendChild(row);
+}
+
+function removerItem(btn){
+  const list=btn.closest('.items-list');
+  if(list.querySelectorAll('.item-row').length>1) btn.closest('.item-row').remove();
+}
+
+function getValoresLista(listId){
+  const rows=document.querySelectorAll(`#${listId} .item-row`);
+  let total=0;const items=[];
+  rows.forEach(row=>{
+    const nome=row.querySelector('input[type=text]').value.trim();
+    const val=parseFloat(row.querySelector('input[type=number]').value)||0;
+    if(val>0){total+=val;items.push({nome:nome||'Item',valor:val})}
+  });
+  return{total,items};
+}
+
+function fmt(v){return'R$ '+v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}
+
+const loadMsgs=['Calculando seus custos...','Aplicando margem de lucro...','Verificando impostos e taxas...','Consultando estratégia de mercado...','Finalizando análise...'];
+let loadInt;
+function iniciarLoad(){let i=0;const el=document.getElementById('loading-msg');el.textContent=loadMsgs[0];loadInt=setInterval(()=>{i=(i+1)%loadMsgs.length;el.textContent=loadMsgs[i];},1800)}
+function pararLoad(){clearInterval(loadInt)}
+
+async function calcularPreco(){
+  const custos=getValoresLista('custos-list');
+  const margem=parseFloat(document.getElementById('p-margem').value)||40;
+  const impostos=parseFloat(document.getElementById('p-impostos').value)||0;
+  const taxaCartao=parseFloat(document.getElementById('p-taxa-cartao').value)||0;
+  const desconto=parseFloat(document.getElementById('p-desconto').value)||0;
+  const horas=parseFloat(document.getElementById('p-horas').value)||0;
+  const valorHora=parseFloat(document.getElementById('p-valor-hora').value)||0;
+  const nome=document.getElementById('p-nome').value.trim()||'Produto';
+
+  // dados negocio
+  const negocio=carregar('precificai_negocio')||{};
+  const totalFixos=negocio.totalFixos||0;
+  const volume=negocio.volume||1;
+  const prolabore=negocio.prolabore||0;
+
+  const custoMaoObra=horas*valorHora;
+  const fixosPorUnidade=(totalFixos+prolabore)/Math.max(volume,1);
+  const custoTotal=custos.total+custoMaoObra+fixosPorUnidade;
+
+  if(custoTotal===0&&horas===0){
+    alert('Informe pelo menos um custo para calcular.');return;
+  }
+
+  // cálculos
+  const totalDeducoes=(impostos+taxaCartao)/100;
+  const precoMinimo=custoTotal/(1-totalDeducoes);
+  const precoIdeal=custoTotal/(1-totalDeducoes-margem/100);
+  const precoComDesconto=precoIdeal*(1-desconto/100);
+  const lucroIdeal=precoIdeal*(margem/100);
+  const margemReal=((precoIdeal-custoTotal)/precoIdeal*100);
+
+  document.getElementById('r-minimo').textContent=fmt(precoMinimo);
+  document.getElementById('r-ideal').textContent=fmt(precoIdeal);
+  document.getElementById('r-desconto').textContent=fmt(precoComDesconto);
+
+  // breakdown
+  const bRows=document.getElementById('breakdown-rows');
+  bRows.innerHTML='';
+  const addRow=(k,v,cls='')=>bRows.innerHTML+=`<div class="breakdown-row ${cls==='total'?'total':''}"><span class="breakdown-key">${k}</span><span class="breakdown-val ${cls}">${v}</span></div>`;
+
+  custos.items.forEach(i=>addRow('→ '+i.nome,fmt(i.valor)));
+  if(custos.total>0) addRow('Custo direto total',fmt(custos.total));
+  if(custoMaoObra>0) addRow(`Mão de obra (${horas}h × ${fmt(valorHora)})`,fmt(custoMaoObra));
+  if(fixosPorUnidade>0) addRow('Rateio de custos fixos por unidade',fmt(fixosPorUnidade));
+  addRow('Custo total por unidade',fmt(custoTotal));
+  addRow(`Impostos e taxas (${impostos+taxaCartao}%)`,fmt(custoTotal*totalDeducoes),'negativo');
+  addRow(`Lucro (${margem}%)`,fmt(lucroIdeal),'positivo');
+  addRow('Preço ideal',fmt(precoIdeal),'destaque total');
+
+  // analise local
+  const analise=[];
+  if(margem<20) analise.push('⚠️ Sua margem de '+margem+'% está abaixo do recomendado. Para a maioria dos negócios, 30 a 50% é o mínimo saudável.');
+  if(fixosPorUnidade>custos.total) analise.push('📌 Seus custos fixos por unidade ('+fmt(fixosPorUnidade)+') são maiores que os custos diretos. Aumentar o volume de vendas reduziria seu preço final.');
+  if(desconto>20) analise.push('🔴 Desconto máximo de '+desconto+'% é arriscado. Considere reduzir para até 15% para proteger sua margem.');
+  if(custoMaoObra===0&&tipoAtivo!=='produto') analise.push('💡 Você não informou o valor da sua hora. Para serviços, isso é essencial para não trabalhar de graça.');
+  if(analise.length===0) analise.push('✅ Sua precificação está bem estruturada. O preço ideal de '+fmt(precoIdeal)+' cobre todos os custos e garante o lucro desejado.');
+  document.getElementById('analise-texto').textContent=analise.join('\n\n');
+
+  document.getElementById('loading').classList.add('show');
+  document.getElementById('results').classList.remove('show');
+  iniciarLoad();
+
+  // IA para análise estratégica
+  try{
+    const negocioInfo=negocio.totalFixos?`Custos fixos mensais: R$${totalFixos.toFixed(2)}, Volume esperado: ${volume} unidades/mês, Pró-labore: R$${prolabore}`:'Dados do negócio não informados';
+    const prompt=`Você é um consultor financeiro especialista em pequenos negócios brasileiros. Analise a precificação abaixo e dê recomendações estratégicas práticas e diretas. Máx 4 parágrafos curtos. Sem travessão no meio de frases.
+
+Produto/Serviço: ${nome} (${tipoAtivo})
+Custo direto: R$${custos.total.toFixed(2)}
+${custoMaoObra>0?'Custo mão de obra: R$'+custoMaoObra.toFixed(2):''}
+${negocioInfo}
+Margem desejada: ${margem}%
+Impostos + taxas: ${impostos+taxaCartao}%
+Preço mínimo calculado: ${fmt(precoMinimo)}
+Preço ideal calculado: ${fmt(precoIdeal)}
+Lucro por unidade: ${fmt(lucroIdeal)}
+
+Dê recomendações sobre: se o preço está competitivo, como comunicar o valor para o cliente, se há espaço para aumentar a margem, e alguma dica específica para esse tipo de negócio.`;
+
+    const res=await fetch('/api/gerar',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,messages:[{role:'user',content:prompt}]})
+    });
+    const data=await res.json();
+    const texto=data.content?.map(b=>b.text||'').join('')||'';
+    document.getElementById('ia-texto').textContent=texto;
+  }catch(e){
+    document.getElementById('ia-texto').textContent='Não foi possível carregar a análise estratégica agora.';
+  }
+
+  pararLoad();
+  document.getElementById('loading').classList.remove('show');
+  document.getElementById('results').classList.add('show');
+  document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function salvarNegocio(){
+  const fixos=getValoresLista('fixos-list');
+  const volume=parseInt(document.getElementById('n-volume').value)||1;
+  const prolabore=parseFloat(document.getElementById('n-prolabore').value)||0;
+  salvar('precificai_negocio',{totalFixos:fixos.total,itemsFixos:fixos.items,volume,prolabore});
+  const ok=document.getElementById('saved-ok');
+  ok.style.opacity='1';setTimeout(()=>ok.style.opacity='0',3000);
+}
+
+function resetar(){
+  document.getElementById('results').classList.remove('show');
+  document.getElementById('p-nome').value='';
+  document.querySelectorAll('#custos-list input').forEach(i=>i.value='');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// carregar negocio salvo
+const negSalvo=carregar('precificai_negocio');
+if(negSalvo&&negSalvo.volume) document.getElementById('n-volume').value=negSalvo.volume;
+if(negSalvo&&negSalvo.prolabore) document.getElementById('n-prolabore').value=negSalvo.prolabore;
+</script>
+</body>
+</html>

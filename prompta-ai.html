@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prompta Aí — Prompts profissionais para qualquer IA</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --laranja:#e8640a;--laranja2:#ff7b2e;--laranja-claro:#fff3ed;--laranja-mid:#ffd0b5;
+  --ink:#1a1a2e;--ink2:#3d3d5c;--ink3:#8888a8;
+  --bg:#f7f8fc;--bg2:#eef0f8;--white:#ffffff;--border:#e0e3f0;
+  --verde:#00b37e;--roxo:#6c5ce7;--azul:#0984e3;--rosa:#e84393;
+  --radius:14px;--shadow:0 2px 16px rgba(26,26,46,0.08);
+}
+body{font-family:'Nunito Sans',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;font-size:15px;line-height:1.6}
+
+.header{background:var(--ink);padding:0 28px;height:62px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;border-bottom:3px solid var(--laranja)}
+.logo{font-family:'Nunito',sans-serif;font-weight:900;font-size:22px;color:white}
+.logo span{color:var(--laranja2)}
+.logo-tag{font-size:11px;font-weight:600;color:var(--ink3);letter-spacing:0.4px;margin-top:1px;font-family:'Nunito Sans',sans-serif}
+.pill{background:var(--laranja);color:white;font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;letter-spacing:0.4px;font-family:'Nunito',sans-serif}
+
+.hero{background:linear-gradient(135deg,var(--ink) 0%,#2d2d5e 100%);padding:24px 28px 20px;text-align:center}
+.hero-title{font-family:'Nunito',sans-serif;font-weight:900;font-size:26px;color:white;letter-spacing:-0.5px;margin-bottom:4px}
+.hero-title span{color:var(--laranja2)}
+.hero-sub{font-size:13px;color:#aaaacc}
+
+.container{max-width:860px;margin:0 auto;padding:28px 20px 72px}
+
+.section-title{font-family:'Nunito',sans-serif;font-weight:900;font-size:20px;color:var(--ink);margin-bottom:4px}
+.section-sub{font-size:13px;color:var(--ink3);margin-bottom:20px}
+
+/* CATEGORIAS */
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:28px}
+.cat-card{background:var(--white);border:2px solid var(--border);border-radius:var(--radius);padding:18px 14px;cursor:pointer;transition:all .2s;text-align:center;user-select:none}
+.cat-card:hover{border-color:var(--ink3);transform:translateY(-2px);box-shadow:var(--shadow)}
+.cat-card.active{border-width:2px;transform:translateY(-2px);box-shadow:var(--shadow)}
+.cat-card.active.c-texto{border-color:var(--azul);background:#f0f7ff}
+.cat-card.active.c-imagem{border-color:var(--rosa);background:#fff0f7}
+.cat-card.active.c-design{border-color:var(--verde);background:#f0fff8}
+.cat-card.active.c-apresentacao{border-color:var(--roxo);background:#f5f0ff}
+.cat-card.active.c-video{border-color:var(--laranja);background:var(--laranja-claro)}
+.cat-icon{font-size:32px;margin-bottom:8px;line-height:1}
+.cat-name{font-family:'Nunito',sans-serif;font-weight:800;font-size:13px;color:var(--ink2)}
+.cat-desc{font-size:11px;color:var(--ink3);margin-top:3px;line-height:1.4}
+
+/* FORM */
+.form-panel{display:none;animation:fadeUp .3s ease}
+.form-panel.show{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+.card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);padding:22px;margin-bottom:16px;box-shadow:var(--shadow)}
+.card-title{font-family:'Nunito',sans-serif;font-weight:800;font-size:12px;color:var(--ink2);text-transform:uppercase;letter-spacing:0.7px;margin-bottom:14px;display:flex;align-items:center;gap:7px}
+
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-group.full{grid-column:1/-1}
+label{font-family:'Nunito',sans-serif;font-weight:700;font-size:11px;color:var(--ink2);text-transform:uppercase;letter-spacing:0.6px}
+input,select,textarea{font-family:'Nunito Sans',sans-serif;font-size:14px;color:var(--ink);background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:10px 13px;transition:all .2s;outline:none;width:100%;resize:vertical}
+input:focus,select:focus,textarea:focus{background:white;box-shadow:0 0 0 3px rgba(232,100,10,0.1)}
+input:focus,select:focus{border-color:var(--laranja)}
+textarea:focus{border-color:var(--laranja)}
+textarea{min-height:80px}
+
+/* IA chips */
+.chips-row{display:flex;gap:8px;flex-wrap:wrap}
+.chip{background:var(--white);border:2px solid var(--border);border-radius:8px;padding:7px 13px;cursor:pointer;transition:all .2s;user-select:none;font-family:'Nunito',sans-serif;font-weight:700;font-size:12px;color:var(--ink3);display:flex;align-items:center;gap:5px}
+.chip input{display:none}
+.chip.selected{border-color:var(--laranja);background:var(--laranja-claro);color:var(--laranja)}
+.chip:hover:not(.selected){border-color:var(--ink3);background:var(--bg2)}
+
+.btn-generate{width:100%;color:white;border:none;padding:15px;border-radius:var(--radius);font-family:'Nunito',sans-serif;font-weight:900;font-size:16px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:10px;background:var(--laranja);box-shadow:0 4px 20px rgba(232,100,10,0.3)}
+.btn-generate:hover{background:var(--laranja2);box-shadow:0 6px 24px rgba(255,123,46,0.35)}
+.btn-generate:active{transform:scale(.99)}
+.btn-generate:disabled{background:var(--ink3);box-shadow:none;cursor:not-allowed}
+
+.loading{display:none;flex-direction:column;align-items:center;gap:14px;padding:44px 20px;text-align:center}
+.loading.show{display:flex}
+.spinner{width:40px;height:40px;border:3px solid var(--bg2);border-top-color:var(--laranja);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-msg{font-size:14px;color:var(--ink3);font-style:italic}
+
+/* RESULTS */
+.results{display:none;margin-top:24px}
+.results.show{display:block}
+
+.prompt-card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);margin-bottom:14px;overflow:hidden;box-shadow:var(--shadow);animation:fadeUp .4s ease both}
+.prompt-card:nth-child(2){animation-delay:.08s}
+.prompt-card:nth-child(3){animation-delay:.16s}
+.prompt-card:nth-child(4){animation-delay:.24s}
+.prompt-card:nth-child(5){animation-delay:.32s}
+
+.prompt-head{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--bg2);background:var(--bg)}
+.prompt-label{display:flex;align-items:center;gap:8px;font-family:'Nunito',sans-serif;font-weight:800;font-size:12px;color:var(--ink2);text-transform:uppercase;letter-spacing:0.6px}
+.ia-badge{font-family:'Nunito',sans-serif;font-weight:700;font-size:11px;padding:3px 10px;border-radius:20px}
+.badge-chatgpt{background:#e8f5e9;color:#1b5e20}
+.badge-claude{background:#fff3e0;color:#e65100}
+.badge-midjourney{background:#f3e5f5;color:#4a148c}
+.badge-leonardo{background:#e8eaf6;color:#1a237e}
+.badge-canva{background:#fce4ec;color:#880e4f}
+.badge-firefly{background:#fff8e1;color:#f57f17}
+.badge-gamma{background:#e8f5e9;color:#1b5e20}
+.badge-beautiful{background:#e3f2fd;color:#0d47a1}
+.badge-geral{background:#f5f5f5;color:#424242}
+
+.btn-copiar{background:none;border:1.5px solid var(--border);color:var(--ink3);padding:6px 12px;border-radius:7px;font-family:'Nunito',sans-serif;font-weight:700;font-size:11px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:5px}
+.btn-copiar:hover{border-color:var(--laranja);color:var(--laranja)}
+.btn-copiar.copiado{border-color:var(--verde);color:var(--verde);background:#f0faf5}
+
+.prompt-body{padding:16px;font-size:13px;line-height:1.8;color:var(--ink2);white-space:pre-wrap;font-family:'Nunito Sans',sans-serif;background:#fafafe;border-radius:0 0 var(--radius) var(--radius)}
+
+.dica-card{background:var(--laranja-claro);border:1.5px solid var(--laranja-mid);border-radius:var(--radius);padding:14px 18px;margin-bottom:14px;font-size:13px;color:#7a3010;line-height:1.6}
+.dica-card strong{font-family:'Nunito',sans-serif;font-weight:800;display:block;margin-bottom:4px}
+
+.results-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.results-title{font-family:'Nunito',sans-serif;font-weight:900;font-size:18px;color:var(--ink)}
+.btn-nova{background:none;border:1.5px solid var(--border);color:var(--ink3);padding:8px 16px;border-radius:8px;font-family:'Nunito',sans-serif;font-weight:700;font-size:12px;cursor:pointer;transition:all .2s}
+.btn-nova:hover{border-color:var(--ink2);color:var(--ink2)}
+
+hr{border:none;border-top:1px solid var(--border);margin:24px 0}
+
+.footer-strip{background:var(--ink);text-align:center;padding:14px;font-size:12px;color:var(--ink3);font-family:'Nunito',sans-serif;font-weight:600;position:fixed;bottom:0;left:0;right:0;border-top:2px solid var(--laranja)}
+.footer-strip span{color:var(--laranja2)}
+
+@media(max-width:600px){
+  .form-grid{grid-template-columns:1fr}
+  .cat-grid{grid-template-columns:repeat(3,1fr)}
+  .container{padding:20px 14px 72px}
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div>
+    <div class="logo">Prompt<span>aí</span></div>
+    <div class="logo-tag">Prompts profissionais para qualquer IA.</div>
+  </div>
+  <span class="pill">BETA</span>
+</header>
+
+<div class="hero">
+  <div class="hero-title">Fale com a IA como um <span>profissional</span></div>
+  <div class="hero-sub">Escolha o que quer criar. A ferramenta monta o prompt certo para você.</div>
+</div>
+
+<div class="container">
+
+  <div class="section-title">O que você quer criar?</div>
+  <p class="section-sub">Escolha a categoria e preencha os detalhes. O Promptaí escreve o prompt por você.</p>
+
+  <!-- CATEGORIAS -->
+  <div class="cat-grid">
+    <div class="cat-card c-texto" onclick="selecionarCat('texto')" id="cat-texto">
+      <div class="cat-icon">✍️</div>
+      <div class="cat-name">Texto</div>
+      <div class="cat-desc">Posts, artigos, e-mails, roteiros</div>
+    </div>
+    <div class="cat-card c-imagem" onclick="selecionarCat('imagem')" id="cat-imagem">
+      <div class="cat-icon">🖼️</div>
+      <div class="cat-name">Imagem</div>
+      <div class="cat-desc">Fotos, ilustrações, artes</div>
+    </div>
+    <div class="cat-card c-design" onclick="selecionarCat('design')" id="cat-design">
+      <div class="cat-icon">🎨</div>
+      <div class="cat-name">Design</div>
+      <div class="cat-desc">Canva, Firefly, artes gráficas</div>
+    </div>
+    <div class="cat-card c-apresentacao" onclick="selecionarCat('apresentacao')" id="cat-apresentacao">
+      <div class="cat-icon">📊</div>
+      <div class="cat-name">Apresentação</div>
+      <div class="cat-desc">Slides, pitches, decks</div>
+    </div>
+    <div class="cat-card c-video" onclick="selecionarCat('video')" id="cat-video">
+      <div class="cat-icon">🎬</div>
+      <div class="cat-name">Vídeo</div>
+      <div class="cat-desc">Roteiros, storyboards, Reels</div>
+    </div>
+  </div>
+
+  <!-- FORMULÁRIOS POR CATEGORIA -->
+
+  <!-- TEXTO -->
+  <div class="form-panel" id="form-texto">
+    <div class="card">
+      <div class="card-title">✍️ Detalhes do texto</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Tipo de texto *</label>
+          <select id="t-tipo">
+            <option value="">Selecione...</option>
+            <option>Post para Instagram</option>
+            <option>Artigo de blog</option>
+            <option>E-mail comercial</option>
+            <option>Roteiro de vídeo</option>
+            <option>Legenda para anúncio</option>
+            <option>Descrição de produto</option>
+            <option>Apresentação institucional</option>
+            <option>Newsletter</option>
+            <option>Script de WhatsApp</option>
+            <option>Outro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Setor / nicho</label>
+          <input type="text" id="t-setor" placeholder="Ex: clínica de estética, escola, restaurante">
+        </div>
+        <div class="form-group">
+          <label>Público-alvo</label>
+          <input type="text" id="t-publico" placeholder="Ex: mulheres 30-50 anos, pais de alunos">
+        </div>
+        <div class="form-group">
+          <label>Tom de voz</label>
+          <select id="t-tom">
+            <option value="">Selecione...</option>
+            <option>Profissional e formal</option>
+            <option>Próximo e acolhedor</option>
+            <option>Divertido e descontraído</option>
+            <option>Inspirador e motivacional</option>
+            <option>Urgente e direto</option>
+            <option>Educativo e informativo</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label>Assunto ou objetivo do texto *</label>
+          <textarea id="t-assunto" placeholder="Ex: Quero um post sobre os benefícios da drenagem linfática para mulheres após os 40 anos, com foco em captar novos clientes para a clínica."></textarea>
+        </div>
+        <div class="form-group">
+          <label>CTA desejado</label>
+          <input type="text" id="t-cta" placeholder="Ex: Agende pelo WhatsApp">
+        </div>
+        <div class="form-group">
+          <label>Tamanho aproximado</label>
+          <select id="t-tamanho">
+            <option value="">Sem preferência</option>
+            <option>Muito curto (até 50 palavras)</option>
+            <option>Curto (50 a 100 palavras)</option>
+            <option>Médio (100 a 300 palavras)</option>
+            <option>Longo (300 a 600 palavras)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">🤖 Para qual IA vai usar?</div>
+      <div class="chips-row" id="chips-texto">
+        <label class="chip selected" id="tc-chatgpt"><input type="checkbox" checked onchange="toggleChip('tc-chatgpt',this)">💬 ChatGPT</label>
+        <label class="chip selected" id="tc-claude"><input type="checkbox" checked onchange="toggleChip('tc-claude',this)">🟠 Claude</label>
+        <label class="chip" id="tc-gemini"><input type="checkbox" onchange="toggleChip('tc-gemini',this)">✨ Gemini</label>
+        <label class="chip" id="tc-copilot"><input type="checkbox" onchange="toggleChip('tc-copilot',this)">🪟 Copilot</label>
+      </div>
+    </div>
+    <button class="btn-generate" onclick="gerarPrompt('texto')">✨ Gerar meu prompt profissional</button>
+  </div>
+
+  <!-- IMAGEM -->
+  <div class="form-panel" id="form-imagem">
+    <div class="card">
+      <div class="card-title">🖼️ Detalhes da imagem</div>
+      <div class="form-grid">
+        <div class="form-group full">
+          <label>O que você quer na imagem? *</label>
+          <textarea id="i-descricao" placeholder="Ex: Uma mulher de 40 anos sorrindo, recebendo uma massagem relaxante em um spa moderno e iluminado, clima sereno e acolhedor."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Estilo visual</label>
+          <select id="i-estilo">
+            <option value="">Sem preferência</option>
+            <option>Fotografia realista</option>
+            <option>Ilustração digital</option>
+            <option>Aquarela</option>
+            <option>Arte minimalista</option>
+            <option>3D render</option>
+            <option>Cartoon / animado</option>
+            <option>Vintage / retrô</option>
+            <option>Cinematográfico</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Paleta de cores</label>
+          <input type="text" id="i-cores" placeholder="Ex: tons terrosos, verde e dourado, preto e branco">
+        </div>
+        <div class="form-group">
+          <label>Formato / proporção</label>
+          <select id="i-formato">
+            <option value="">Sem preferência</option>
+            <option>Quadrado (1:1 — Instagram feed)</option>
+            <option>Vertical (4:5 — Instagram retrato)</option>
+            <option>Stories (9:16)</option>
+            <option>Paisagem (16:9)</option>
+            <option>Banner horizontal</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Iluminação</label>
+          <select id="i-luz">
+            <option value="">Sem preferência</option>
+            <option>Natural e suave</option>
+            <option>Estúdio profissional</option>
+            <option>Golden hour (pôr do sol)</option>
+            <option>Dramática com sombras</option>
+            <option>Ambiente noturno</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label>O que NÃO deve aparecer</label>
+          <input type="text" id="i-negativo" placeholder="Ex: texto, logo, pessoas masculinas, fundo bagunçado">
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">🤖 Para qual IA vai usar?</div>
+      <div class="chips-row">
+        <label class="chip selected" id="ic-midjourney"><input type="checkbox" checked onchange="toggleChip('ic-midjourney',this)">🎨 Midjourney</label>
+        <label class="chip selected" id="ic-leonardo"><input type="checkbox" checked onchange="toggleChip('ic-leonardo',this)">🦁 Leonardo AI</label>
+        <label class="chip" id="ic-dall"><input type="checkbox" onchange="toggleChip('ic-dall',this)">🖼️ DALL-E</label>
+        <label class="chip" id="ic-stable"><input type="checkbox" onchange="toggleChip('ic-stable',this)">⚡ Stable Diffusion</label>
+      </div>
+    </div>
+    <button class="btn-generate" onclick="gerarPrompt('imagem')">✨ Gerar meu prompt profissional</button>
+  </div>
+
+  <!-- DESIGN -->
+  <div class="form-panel" id="form-design">
+    <div class="card">
+      <div class="card-title">🎨 Detalhes do design</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Tipo de peça *</label>
+          <select id="d-tipo">
+            <option value="">Selecione...</option>
+            <option>Post Instagram (feed)</option>
+            <option>Story Instagram</option>
+            <option>Banner para site</option>
+            <option>Flyer / panfleto</option>
+            <option>Cartão de visita</option>
+            <option>Logo</option>
+            <option>Capa de destaque</option>
+            <option>Card de depoimento</option>
+            <option>Cardápio</option>
+            <option>Certificado</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Setor / nicho</label>
+          <input type="text" id="d-setor" placeholder="Ex: restaurante japonês, clínica odontológica">
+        </div>
+        <div class="form-group full">
+          <label>O que precisa aparecer na peça *</label>
+          <textarea id="d-conteudo" placeholder="Ex: Nome da empresa 'Sushi Nakamura', frase 'Delivery até as 23h', logo no canto, botão com WhatsApp, foto de comida em destaque."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Estilo visual</label>
+          <select id="d-estilo">
+            <option value="">Sem preferência</option>
+            <option>Moderno e minimalista</option>
+            <option>Colorido e vibrante</option>
+            <option>Elegante e sofisticado</option>
+            <option>Divertido e jovem</option>
+            <option>Rústico e artesanal</option>
+            <option>Corporativo e sério</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Cores da marca</label>
+          <input type="text" id="d-cores" placeholder="Ex: vermelho e preto, azul marinho e dourado">
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">🤖 Para qual IA vai usar?</div>
+      <div class="chips-row">
+        <label class="chip selected" id="dc-canva"><input type="checkbox" checked onchange="toggleChip('dc-canva',this)">🎨 Canva IA</label>
+        <label class="chip selected" id="dc-firefly"><input type="checkbox" checked onchange="toggleChip('dc-firefly',this)">🔥 Adobe Firefly</label>
+        <label class="chip" id="dc-chatgpt"><input type="checkbox" onchange="toggleChip('dc-chatgpt',this)">💬 ChatGPT</label>
+      </div>
+    </div>
+    <button class="btn-generate" onclick="gerarPrompt('design')">✨ Gerar meu prompt profissional</button>
+  </div>
+
+  <!-- APRESENTAÇÃO -->
+  <div class="form-panel" id="form-apresentacao">
+    <div class="card">
+      <div class="card-title">📊 Detalhes da apresentação</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Tema / título *</label>
+          <input type="text" id="a-tema" placeholder="Ex: Proposta comercial para clientes corporativos">
+        </div>
+        <div class="form-group">
+          <label>Objetivo</label>
+          <select id="a-objetivo">
+            <option value="">Selecione...</option>
+            <option>Vender um produto ou serviço</option>
+            <option>Apresentar a empresa</option>
+            <option>Treinar ou capacitar</option>
+            <option>Informar ou reportar resultados</option>
+            <option>Lançar um produto</option>
+            <option>Pitch para investidores</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Público da apresentação</label>
+          <input type="text" id="a-publico" placeholder="Ex: diretores de RH de médias empresas">
+        </div>
+        <div class="form-group">
+          <label>Quantidade de slides</label>
+          <select id="a-slides">
+            <option value="">Sem preferência</option>
+            <option>Curta (5 a 8 slides)</option>
+            <option>Média (10 a 15 slides)</option>
+            <option>Completa (15 a 25 slides)</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label>Conteúdo principal a abordar *</label>
+          <textarea id="a-conteudo" placeholder="Ex: Apresentar o serviço de consultoria de marketing digital, mostrar cases de sucesso, planos e preços, e fechar com CTA para agendar uma reunião."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Estilo visual</label>
+          <select id="a-estilo">
+            <option value="">Sem preferência</option>
+            <option>Moderno e clean</option>
+            <option>Corporativo e sério</option>
+            <option>Colorido e criativo</option>
+            <option>Minimalista</option>
+            <option>Dark / escuro</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">🤖 Para qual IA vai usar?</div>
+      <div class="chips-row">
+        <label class="chip selected" id="ac-gamma"><input type="checkbox" checked onchange="toggleChip('ac-gamma',this)">⚡ Gamma</label>
+        <label class="chip selected" id="ac-beautiful"><input type="checkbox" checked onchange="toggleChip('ac-beautiful',this)">✨ Beautiful.ai</label>
+        <label class="chip" id="ac-chatgpt"><input type="checkbox" onchange="toggleChip('ac-chatgpt',this)">💬 ChatGPT</label>
+        <label class="chip" id="ac-claude"><input type="checkbox" onchange="toggleChip('ac-claude',this)">🟠 Claude</label>
+      </div>
+    </div>
+    <button class="btn-generate" onclick="gerarPrompt('apresentacao')">✨ Gerar meu prompt profissional</button>
+  </div>
+
+  <!-- VÍDEO -->
+  <div class="form-panel" id="form-video">
+    <div class="card">
+      <div class="card-title">🎬 Detalhes do vídeo</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Tipo de vídeo *</label>
+          <select id="v-tipo">
+            <option value="">Selecione...</option>
+            <option>Reels / TikTok (15 a 60s)</option>
+            <option>Vídeo institucional</option>
+            <option>Anúncio pago</option>
+            <option>Depoimento de cliente</option>
+            <option>Tutorial / como fazer</option>
+            <option>Bastidores da empresa</option>
+            <option>Lançamento de produto</option>
+            <option>Vídeo de vendas (VSL)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Duração aproximada</label>
+          <select id="v-duracao">
+            <option value="">Sem preferência</option>
+            <option>Muito curto (até 15s)</option>
+            <option>Curto (15s a 60s)</option>
+            <option>Médio (1 a 3 min)</option>
+            <option>Longo (3 a 10 min)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Setor / nicho</label>
+          <input type="text" id="v-setor" placeholder="Ex: academia de ginástica, escola de idiomas">
+        </div>
+        <div class="form-group">
+          <label>Público-alvo</label>
+          <input type="text" id="v-publico" placeholder="Ex: jovens 18-30 anos interessados em fitness">
+        </div>
+        <div class="form-group full">
+          <label>Mensagem principal ou objetivo *</label>
+          <textarea id="v-mensagem" placeholder="Ex: Mostrar os resultados reais de alunos da academia após 3 meses de treino, com foco em captação de novos alunos para o plano anual."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Tom / clima do vídeo</label>
+          <select id="v-tom">
+            <option value="">Sem preferência</option>
+            <option>Energético e motivacional</option>
+            <option>Emocional e tocante</option>
+            <option>Profissional e sério</option>
+            <option>Divertido e descontraído</option>
+            <option>Urgente e persuasivo</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">🤖 Para qual IA vai usar?</div>
+      <div class="chips-row">
+        <label class="chip selected" id="vc-chatgpt"><input type="checkbox" checked onchange="toggleChip('vc-chatgpt',this)">💬 ChatGPT (roteiro)</label>
+        <label class="chip selected" id="vc-claude"><input type="checkbox" checked onchange="toggleChip('vc-claude',this)">🟠 Claude (roteiro)</label>
+        <label class="chip" id="vc-runway"><input type="checkbox" onchange="toggleChip('vc-runway',this)">🎬 Runway (vídeo IA)</label>
+        <label class="chip" id="vc-sora"><input type="checkbox" onchange="toggleChip('vc-sora',this)">⚡ Sora</label>
+      </div>
+    </div>
+    <button class="btn-generate" onclick="gerarPrompt('video')">✨ Gerar meu prompt profissional</button>
+  </div>
+
+  <!-- LOADING -->
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    <div class="loading-msg" id="loading-msg">Analisando o que você precisa...</div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="results" id="results">
+    <hr>
+    <div class="results-top">
+      <div class="results-title">🚀 Seus prompts prontos</div>
+      <button class="btn-nova" onclick="resetar()">↩ Criar outro</button>
+    </div>
+    <div class="dica-card" id="dica-uso"></div>
+    <div id="prompts-container"></div>
+  </div>
+
+</div>
+
+<div class="footer-strip">Simplifica <span>Aí</span> — Promptaí</div>
+
+<script>
+let catAtiva=null;
+
+const coresCategoria={
+  texto:'var(--azul)',imagem:'var(--rosa)',
+  design:'var(--verde)',apresentacao:'var(--roxo)',video:'var(--laranja)'
+};
+
+function selecionarCat(cat){
+  document.querySelectorAll('.cat-card').forEach(c=>c.classList.remove('active'));
+  document.querySelectorAll('.form-panel').forEach(p=>p.classList.remove('show'));
+  document.getElementById('cat-'+cat).classList.add('active');
+  document.getElementById('form-'+cat).classList.add('show');
+  document.getElementById('results').classList.remove('show');
+  catAtiva=cat;
+  document.getElementById('form-'+cat).scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function toggleChip(id,cb){document.getElementById(id).classList.toggle('selected',cb.checked)}
+
+function getChipsSelected(prefix){
+  const chips=document.querySelectorAll(`[id^="${prefix}"].selected`);
+  return Array.from(chips).map(c=>c.textContent.trim().replace(/^[^\w]*/,'').split(' ')[0]);
+}
+
+const msgs=['Analisando o que você precisa...','Estruturando o prompt ideal...','Adaptando para cada plataforma...','Adicionando os detalhes técnicos...','Finalizando seus prompts...'];
+let msgInt;
+function iniciarLoad(){let i=0;const el=document.getElementById('loading-msg');el.textContent=msgs[0];msgInt=setInterval(()=>{i=(i+1)%msgs.length;el.textContent=msgs[i];},2000)}
+function pararLoad(){clearInterval(msgInt)}
+
+function coletarDados(cat){
+  if(cat==='texto') return {
+    tipo:document.getElementById('t-tipo').value,
+    setor:document.getElementById('t-setor').value,
+    publico:document.getElementById('t-publico').value,
+    tom:document.getElementById('t-tom').value,
+    assunto:document.getElementById('t-assunto').value,
+    cta:document.getElementById('t-cta').value,
+    tamanho:document.getElementById('t-tamanho').value,
+    ias:['tc-chatgpt','tc-claude','tc-gemini','tc-copilot'].filter(id=>document.getElementById(id).classList.contains('selected')).map(id=>document.getElementById(id).textContent.trim())
+  };
+  if(cat==='imagem') return {
+    descricao:document.getElementById('i-descricao').value,
+    estilo:document.getElementById('i-estilo').value,
+    cores:document.getElementById('i-cores').value,
+    formato:document.getElementById('i-formato').value,
+    luz:document.getElementById('i-luz').value,
+    negativo:document.getElementById('i-negativo').value,
+    ias:['ic-midjourney','ic-leonardo','ic-dall','ic-stable'].filter(id=>document.getElementById(id).classList.contains('selected')).map(id=>document.getElementById(id).textContent.trim())
+  };
+  if(cat==='design') return {
+    tipo:document.getElementById('d-tipo').value,
+    setor:document.getElementById('d-setor').value,
+    conteudo:document.getElementById('d-conteudo').value,
+    estilo:document.getElementById('d-estilo').value,
+    cores:document.getElementById('d-cores').value,
+    ias:['dc-canva','dc-firefly','dc-chatgpt'].filter(id=>document.getElementById(id).classList.contains('selected')).map(id=>document.getElementById(id).textContent.trim())
+  };
+  if(cat==='apresentacao') return {
+    tema:document.getElementById('a-tema').value,
+    objetivo:document.getElementById('a-objetivo').value,
+    publico:document.getElementById('a-publico').value,
+    slides:document.getElementById('a-slides').value,
+    conteudo:document.getElementById('a-conteudo').value,
+    estilo:document.getElementById('a-estilo').value,
+    ias:['ac-gamma','ac-beautiful','ac-chatgpt','ac-claude'].filter(id=>document.getElementById(id).classList.contains('selected')).map(id=>document.getElementById(id).textContent.trim())
+  };
+  if(cat==='video') return {
+    tipo:document.getElementById('v-tipo').value,
+    duracao:document.getElementById('v-duracao').value,
+    setor:document.getElementById('v-setor').value,
+    publico:document.getElementById('v-publico').value,
+    mensagem:document.getElementById('v-mensagem').value,
+    tom:document.getElementById('v-tom').value,
+    ias:['vc-chatgpt','vc-claude','vc-runway','vc-sora'].filter(id=>document.getElementById(id).classList.contains('selected')).map(id=>document.getElementById(id).textContent.trim())
+  };
+}
+
+function validar(cat,d){
+  const obrigatorios={
+    texto:['assunto'],imagem:['descricao'],design:['conteudo'],
+    apresentacao:['tema','conteudo'],video:['mensagem']
+  };
+  for(const campo of (obrigatorios[cat]||[])){
+    if(!d[campo]||!d[campo].trim()){return false}
+  }
+  if(!d.ias||!d.ias.length){return false}
+  return true;
+}
+
+async function gerarPrompt(cat){
+  const d=coletarDados(cat);
+  if(!validar(cat,d)){alert('Preencha os campos obrigatórios e selecione pelo menos uma IA.');return;}
+
+  document.getElementById('btn-generate') && (document.querySelectorAll('.btn-generate').forEach(b=>b.disabled=true));
+  document.getElementById('loading').classList.add('show');
+  document.getElementById('results').classList.remove('show');
+  iniciarLoad();
+
+  const system=`Você é um especialista em engenharia de prompts para inteligências artificiais. Cria prompts profissionais, detalhados e otimizados para cada plataforma. Cada prompt deve ser específico para a IA solicitada, usando a sintaxe e os parâmetros corretos de cada uma.
+
+Responda SOMENTE com JSON válido, sem markdown. Formato:
+{
+  "prompts": [
+    {
+      "ia": "Nome da IA",
+      "prompt": "O prompt completo e otimizado",
+      "dica": "Uma dica curta de como usar esse prompt nessa IA"
+    }
+  ],
+  "dica_geral": "Uma dica geral sobre como obter melhores resultados com esses prompts"
+}`;
+
+  const detalhes=JSON.stringify(d,null,2);
+  const user=`Categoria: ${cat}
+IAs selecionadas: ${d.ias.join(', ')}
+
+Dados fornecidos:
+${detalhes}
+
+Crie um prompt profissional e otimizado para CADA uma das IAs selecionadas. Adapte o estilo, sintaxe e estrutura para cada plataforma. Para Midjourney use parâmetros como --ar, --style, --v. Para ChatGPT e Claude use instrução clara com contexto. Para Canva e Firefly foque na descrição visual. Para Gamma e Beautiful.ai estruture com outline de slides.`;
+
+  try{
+    const res=await fetch('/api/gerar',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:4000,system,messages:[{role:'user',content:user}]})
+    });
+    const data=await res.json();
+    const raw=data.content?.map(b=>b.text||'').join('')||'';
+    let parsed;
+    try{parsed=JSON.parse(raw.replace(/```json|```/g,'').trim())}
+    catch(e){throw new Error('Resposta inválida.')}
+    pararLoad();
+    document.getElementById('loading').classList.remove('show');
+    document.querySelectorAll('.btn-generate').forEach(b=>b.disabled=false);
+    renderPrompts(parsed);
+  }catch(err){
+    pararLoad();
+    document.getElementById('loading').classList.remove('show');
+    document.querySelectorAll('.btn-generate').forEach(b=>b.disabled=false);
+    alert('Erro ao gerar prompts: '+err.message);
+  }
+}
+
+const badgeMap={
+  'ChatGPT':'badge-chatgpt','Claude':'badge-claude','Gemini':'badge-geral','Copilot':'badge-geral',
+  'Midjourney':'badge-midjourney','Leonardo':'badge-leonardo','DALL-E':'badge-geral','Stable':'badge-geral',
+  'Canva':'badge-canva','Firefly':'badge-firefly','Gamma':'badge-gamma','Beautiful.ai':'badge-beautiful',
+  'Runway':'badge-geral','Sora':'badge-geral'
+};
+
+function getBadge(ia){
+  for(const[k,v] of Object.entries(badgeMap)){
+    if(ia.toLowerCase().includes(k.toLowerCase()))return v;
+  }
+  return 'badge-geral';
+}
+
+function renderPrompts(data){
+  document.getElementById('dica-uso').innerHTML=`<strong>💡 Dica de uso</strong>${data.dica_geral||''}`;
+  const c=document.getElementById('prompts-container');
+  c.innerHTML='';
+  (data.prompts||[]).forEach((p,i)=>{
+    const card=document.createElement('div');
+    card.className='prompt-card';
+    const badge=getBadge(p.ia);
+    card.innerHTML=`
+      <div class="prompt-head">
+        <div class="prompt-label">
+          <span class="ia-badge ${badge}">${p.ia}</span>
+          ${p.dica?`<span style="font-size:11px;color:var(--ink3);font-weight:400;margin-left:4px">${p.dica}</span>`:''}
+        </div>
+        <button class="btn-copiar" onclick="copiar(this,'pb-${i}')">📋 Copiar</button>
+      </div>
+      <div class="prompt-body" id="pb-${i}">${esc(p.prompt)}</div>`;
+    c.appendChild(card);
+  });
+  document.getElementById('results').classList.add('show');
+  document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+function copiar(btn,id){
+  const txt=document.getElementById(id).textContent;
+  navigator.clipboard.writeText(txt).then(()=>{
+    btn.textContent='✅ Copiado!';btn.classList.add('copiado');
+    setTimeout(()=>{btn.textContent='📋 Copiar';btn.classList.remove('copiado');},2500);
+  });
+}
+
+function resetar(){
+  document.getElementById('results').classList.remove('show');
+  document.querySelectorAll('.form-panel').forEach(p=>p.classList.remove('show'));
+  document.querySelectorAll('.cat-card').forEach(c=>c.classList.remove('active'));
+  catAtiva=null;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
