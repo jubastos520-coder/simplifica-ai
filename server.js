@@ -36,7 +36,7 @@ async function handleAPI(req, res) {
       }
 
       const payload = JSON.stringify({
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-haiku-4-5-20251001',
         max_tokens: max_tokens || 1500,
         system: system || '',
         messages
