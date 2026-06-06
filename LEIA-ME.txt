@@ -1,0 +1,41 @@
+SIMPLIFICA AÍ — GUIA DE INSTALAÇÃO NO NETLIFY
+===============================================
+
+PASSO 1 — Criar conta
+Acesse netlify.com e crie sua conta gratuita com o Google.
+
+PASSO 2 — Fazer o deploy
+Na tela inicial do Netlify, arraste a pasta "simplifica-ai-netlify" 
+direto para a área indicada "Drag and drop your site folder here".
+Aguarde o deploy (menos de 1 minuto).
+
+PASSO 3 — Configurar a chave da API
+No seu site no Netlify:
+- Clique em "Site configuration"
+- Clique em "Environment variables"
+- Clique em "Add a variable"
+- Key: ANTHROPIC_API_KEY
+- Value: sua chave sk-ant-...
+- Clique em "Save"
+
+PASSO 4 — Redesploy
+Depois de salvar a variável:
+- Vá em "Deploys"
+- Clique em "Trigger deploy" > "Deploy site"
+- Aguarde finalizar
+
+PASSO 5 — Testar
+Acesse a URL gerada pelo Netlify e teste qualquer ferramenta.
+
+ESTRUTURA DOS ARQUIVOS
+======================
+index.html                    -> página inicial
+ferramentas/copiai.html       -> Copiaí
+ferramentas/planeja-ai.html   -> Planeja Aí
+ferramentas/prompta-ai.html   -> Promptaí
+ferramentas/precifica-ai.html -> Precifica Aí
+ferramentas/responde-ai.html  -> Responde Aí
+ferramentas/cobra-ai.html     -> Cobra Aí
+ferramentas/orca-ai.html      -> Orça Aí
+netlify/functions/gerar.js    -> servidor intermediário
+netlify.toml                  -> configuração do Netlify
